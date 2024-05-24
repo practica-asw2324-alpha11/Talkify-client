@@ -5,6 +5,7 @@
   padding: 2rem;
   font-weight: normal;
 }
+
 a,
 .green {
   text-decoration: none;
@@ -40,11 +41,10 @@ a,
 
 .sub-navbar {
   display: flex;
-  justify-content: space-between;
   padding: 1rem;
-  background-color: #333;
-  color: #fff;
+  background-color: #222 !important;
   width: 100%;
+  height: auto;
 }
 
 .navbar-icons {
@@ -82,19 +82,19 @@ a,
 .post-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
 }
 
 .post-content {
   flex: 1;
-  align-items: center; 
+  align-items: center;
   margin-left: 50px;
   color: #fff;
 
 }
 
 .vote-buttons {
-  margin-right: 10px; 
+  margin-right: 10px;
 }
 
 .vote {
@@ -126,7 +126,7 @@ a,
 
 .first-part h2 a {
   color: white;
-  
+
 }
 
 .first-part span {
