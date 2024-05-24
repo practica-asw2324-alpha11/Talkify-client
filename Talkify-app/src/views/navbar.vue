@@ -14,8 +14,7 @@
             </menu>
             <div class="navbar-icons">
                 <el-input v-model="searchQuery" placeholder="Buscar..." :prefix-icon="searchIcon" @keyup.enter="handleSearch" :class="['dark-mode']" style="margin-right: 60px;"> </el-input>              
-                <el-select v-model="selectedOption" placeholder="New" suffix-icon= "Plus"  :class="['dark-mode']">
-                <el-option value=""></el-option>
+                <el-select v-model="selectedOption" placeholder="New" suffix-icon= "Plus" @change="handleNewPost" :class="['dark-mode']">
                 <el-option value="link">Add new link</el-option>
                 <el-option value="thread">Add new thread</el-option>
                 <el-option value="magazine">Add new magazine</el-option>
@@ -46,7 +45,10 @@
   const selectedOption = ref('');
   const router = useRouter();
 
-  
+  const handleNewPost = (type) => {
+  router.push({ name: 'newpost', params: { type } });
+};
+
   const handleSearch = () => {
   router.push({ name: 'search', query: { query: searchQuery.value } });
 };

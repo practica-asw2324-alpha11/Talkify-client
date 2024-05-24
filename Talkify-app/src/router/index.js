@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('../views/search.vue'),
       props: route => ({ query: route.query.query }), 
     },
+    {
+      path: '/newpost/:type?',
+      name: 'newpost',
+      component:() => import('../views/newpost.vue'),
+    },
   ]
 })
 
