@@ -12,7 +12,13 @@ const router = createRouter({
       path: '/post/:id',
       name: 'post',
       component: () => import('../views/post.vue')
-    }
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('../views/search.vue'),
+      props: route => ({ query: route.query.query }), 
+    },
   ]
 })
 
