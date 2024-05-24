@@ -1,12 +1,10 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
 }
-
 a,
 .green {
   text-decoration: none;
@@ -32,4 +30,106 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sub-navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #333;
+  color: #fff;
+  width: 100%;
+}
+
+.navbar-icons {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #444;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.wotitem {
+  border: 2px solid #3d3c3d;
+  margin: 20px auto;
+  padding: 1em;
+  width: 90%;
+  background-color: #3d3c3d;
+  border-color: #4a4a4a;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-top: 30px;
+}
+
+.post-content {
+  flex: 1;
+  align-items: center; 
+  margin-left: 50px;
+
+}
+
+.vote-buttons {
+  margin-right: 10px; 
+}
+
+.vote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1c1c1c;
+  border: 0;
+  color: #b6b6b6;
+  cursor: pointer;
+  font-weight: 700;
+  height: 1.2rem;
+  margin: 0;
+  padding: 0;
+  width: 4rem;
+}
+
+.upvoted {
+  color: green;
+}
+
+.downvoted {
+  color: red;
+}
+
+.post-content {
+  margin-left: 100px;
+}
+
+.first-part h2 a {
+  color: white;
+  
+}
+
+.first-part span {
+  font-size: 14px;
+  color: white;
 }
