@@ -30,12 +30,12 @@
         </div>
         <div class="form-group">
           <label for="magazine">Magazine:</label>
-          <select v-model="formData.magazine_id" id="magazine" class="form-control">
-            <option v-for="magazine in magazines" :key="magazine.id" :value="magazine.id">{{ magazine.name }}</option>
-          </select>
+        <select v-model="formData.magazine_id" id="magazine" class="form-control">
+          <option v-for="magazine in magazines" :key="magazine.id" :value="magazine.id" :selected="magazine.id === formData.magazine_id">{{ magazine.name }}</option>
+        </select>
         </div>
         <div class="form-group text-right">
-          <el-button type="submit" class="btn btn-secondary btn-rectangular">Guardar Cambios</el-button>
+          <el-button type="submit" class="btn btn-secondary btn-rectangular" @click="updatePost">Guardar Cambios</el-button>
           <el-button type="button" class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
         </div>
       </form>
@@ -88,7 +88,7 @@ const toggleEditMode = () => {
     formData.value = {
       title: post.value.title,
       url: post.value.link ? post.value.url : '',
-      body: !post.value.link ? post.value.body : '',
+      body: post.value.body,
       magazine_id: post.value.magazine_id || null,
     }
   }
@@ -99,7 +99,7 @@ const updatePost = async () => {
     let payload = {
       title: formData.value.title,
       url: post.value.link ? formData.value.url : null,
-      body: !post.value.link ? formData.value.body : null,
+      body: formData.value.body,
       magazine_id: formData.value.magazine_id,
     }
     await api.put(`posts/${route.params.id}`, payload)
