@@ -1,17 +1,38 @@
 <template>
-  <header>
-    <nav>
-    </nav>
-  </header>
-  <main>
-    <RouterView/>
-  </main>
+  <div id="app">
+    <main>
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 
-<style scoped>
-/* Your styles here */
+<style>
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+  width: 100%;
+}
+
+header, main {
+  width: 100%;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 </style>
