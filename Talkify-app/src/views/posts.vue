@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <h1>Talkify</h1>
+    <navbar></navbar>
 
     <div class="sub-navbar">
-      <div>
-        <router-link @click.prevent="fetchPosts('top')">Top</router-link>
-        <router-link @click.prevent="fetchPosts('newest')">Newest</router-link>
+      <div style="font-size: 18px; margin-left: 80px;">
+        <router-link @click.prevent="fetchPosts('top')">Top </router-link>
+        <router-link @click.prevent="fetchPosts('newest')">Newest  </router-link>
         <router-link @click.prevent="fetchPosts('commented')">Commented</router-link>
       </div>
-      <div class="dropdown">
-    <el-select v-model="selectedOption" placeholder="Select an option" size="mini" @change="handleDropdownChange">
+      <div class="dropdown" >
+    <el-select v-model="selectedOption" placeholder="Select an option"   suffix-icon= "Filter" @change="handleDropdownChange" color="rgb(0,0,0)"  >
       <el-option label="All" value=""></el-option>
       <el-option label="Links" value="links"></el-option>
       <el-option label="Threads" value="threads"></el-option>
@@ -24,9 +24,13 @@
 </template>
 
 <script setup>
+
 import { onMounted, ref, inject } from 'vue'
-import { ElSelect, ElOption } from 'element-plus';
+import { ElSelect, ElOption, ElIcon, ElInput} from 'element-plus';
 import postbox from './postbox.vue'; 
+import navbar from './navbar.vue'; 
+
+
 
 
 
@@ -91,8 +95,9 @@ let currentSort = 'top';
   margin: 10px 0; /* Añade un margen en la parte superior e inferior */
 }
 
-.dropdown .el-select .el-input {
-  background-color: hsla(160, 100%, 37%, 1);
-  color: rgb(21, 3, 108);
+.el-select-dropdown__item:hover {
+  background-color:#6a9c7a;
+  color-scheme: rgb(0, 0, 0);
+  color-scheme: rgb(0,0,0);
 }
 </style>
