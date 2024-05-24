@@ -4,95 +4,69 @@
 
     <div class="sub-navbar">
       <div>
-        <router-link @click="fetchPosts('top')">Top</router-link>
-        <router-link  @click="fetchPosts('newest')">Newest</router-link>
-        <router-link  @click="fetchPosts('commented')">Commented</router-link>
+        <router-link @click.prevent="fetchPosts('top')">Top</router-link>
+        <router-link @click.prevent="fetchPosts('newest')">Newest</router-link>
+        <router-link @click.prevent="fetchPosts('commented')">Commented</router-link>
       </div>
-      <div class="navbar-icons">
-          
-
-        
-      </div>
+      <div class="dropdown">
+    <el-select v-model="selectedOption" placeholder="Select an option" size="mini" @change="handleDropdownChange">
+      <el-option label="All" value=""></el-option>
+      <el-option label="Links" value="links"></el-option>
+      <el-option label="Threads" value="threads"></el-option>
+    </el-select>
+  </div>
     </div>
-
-    <div v-for="post in posts" :key="post.id" class="wotitem">
-      <div class="post-header">
-        <div class="vote-el-buttons">
-          <el-button type="primary" @click="upvote(post.id)" class="vote">
-            <span>{{ post.upvotes_count }} &nbsp;</span>
-            <el-icon><Top /></el-icon>
-          </el-button :style="{ color: post.upvoted ? 'green' : '' }">
-          <br>
-          <el-button type="primary" @click="downvote(post.id)" class="vote">
-            <span>{{ post.downvotes_count }} &nbsp;</span>
-            <el-icon :style="{ color: post.downvoted ? 'red' : '' }"><Bottom /></el-icon>
-          </el-button>
-        </div>
-      </div>
-      <div class="post-content">
-        <span class="first-part">
-          <h2>
-            <a :href="'/posts/' + post.id" style="color: white;">{{ post.title }}</a>
-            <span v-if="post.link" style="font-size: 14px;">
-              (<a :href="post.url" target="_blank" style="color: white;">{{ post.url }}</a>)
-            </span>
-          </h2>
-        </span>
-        <div>
-          {{ post.body }}
-        </div>
-        <div class="activity">
-          <a :href="`/post/${post.id}`"> comments ({{ post.comments_count }})</a>
-          <span> boosts ({{ post.boosts }})</span>
-        </div>
-      </div>
+      
+    <div v-for="post in posts" :key="post.id">
+      <postbox :post="post" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref, inject } from 'vue'
+import { ElSelect, ElOption } from 'element-plus';
+import postbox from './postbox.vue'; 
+
+
+
+const selectedOption = ref('all');
+
+
+
+
+
+const handleDropdownChange = async (value) => {
+  await fetchPosts(currentSort, value); 
+};
 
 const posts = ref([])
 const api = inject('axios')
 
 onMounted(async () => {
-    await fetchPosts("top"); 
+    await fetchPosts("top", "all"); 
 })
 
-const upvote = async (postId) => {
+
+
+const fetchPosts = async (sortBy, filter) => {
   try {
-    await api.post(`posts/${postId}/upvote`)
-    await fetchPosts(); 
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const downvote = async (postId) => {
-  try {
-    await api.post(`posts/${postId}/downvote`)
-    await fetchPosts(); 
-
-
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const fetchPosts = async (sortBy) => {
-  try {
+    currentSort = sortBy;
     const response = await api.get('posts', {
       params: {
-        sort_by: sortBy
+        sort_by: sortBy,
+        filter: filter
       }
     });
-    posts.value = response.data;
+    posts.value = response.data.posts;
     console.log(posts.value)
   } catch (error) {
     console.error(error);
   }
 }
+
+let currentSort = 'top';
+
 </script>
 
 <style scoped>
@@ -115,5 +89,10 @@ const fetchPosts = async (sortBy) => {
 
 .icon-container {
   margin: 10px 0; /* Añade un margen en la parte superior e inferior */
+}
+
+.dropdown .el-select .el-input {
+  background-color: hsla(160, 100%, 37%, 1);
+  color: rgb(21, 3, 108);
 }
 </style>

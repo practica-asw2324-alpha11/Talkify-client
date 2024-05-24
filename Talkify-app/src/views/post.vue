@@ -1,5 +1,8 @@
 <template>
+
+
     <div id="post" class="wotitem">
+        <postbox :post="post" />
         {{ post.body }}
     </div>
 
@@ -12,6 +15,8 @@
 import { onMounted, ref, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import Comment from './comment.vue'
+import postbox from './postbox.vue'; 
+
 
 const post = ref({})
 const comments = ref([])
