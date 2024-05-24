@@ -8,6 +8,8 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import 'element-plus/theme-chalk/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 </script>
 
 <style>
