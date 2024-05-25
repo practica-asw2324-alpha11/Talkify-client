@@ -27,12 +27,32 @@
         </el-row>
         <el-row>
             <a style="margin-bottom: 10px; margin-top: 10px;" @click="reply_to = reply_to === '' ? comment.id : ''">reply</a>
-            <a v-if="comment.is_author" style="margin-bottom: 10px; margin-top: 10px;" @click="reply_to = reply_to === '' ? comment.id : ''">edit</a>
-            <a v-if="comment.is_author" style="margin-bottom: 10px; margin-top: 10px;">delete</a>
+            <el-dropdown v-if="comment.is_author" >
+                <a style="font-size: 1.1em; margin-bottom: 10px; margin-top: 14px">more</a>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item>
+                            <span style="color: hsla(160, 100%, 37%, 1);" @click="edit = edit === '' ? comment.id : ''">edit</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <span style="color: hsla(160, 100%, 37%, 1);" >delete</span>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
         </el-row>
+        <div v-if="edit === comment.id">
+            <el-row>
+                <el-input v-model="edit_body" type="textarea" :input-style="textareaStyle" :rows="3" ></el-input>
+            </el-row>
+            <br>
+            <el-row justify="end">
+                <el-button @click="editComment(comment.id)"> Edit Comment! </el-button>
+            </el-row>
+        </div>
         <div v-if="reply_to === comment.id">
             <el-row>
-                <el-input v-model="reply_body" type="textarea" class="dark-input" :rows="3" ></el-input>
+                <el-input v-model="reply_body" type="textarea" :input-style="textareaStyle" :rows="3" ></el-input>
             </el-row>
             <br>
             <el-row justify="end">
@@ -49,7 +69,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject, defineProps } from 'vue'
+import { onMounted, ref, inject, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatDistanceToNow } from 'date-fns';
 
@@ -62,17 +82,18 @@ const route = useRoute()
 const comment = ref(props.comment)
 const reply_body = ref('')
 const reply_to = ref('')
+const edit = ref('')
+const edit_body = ref('')
+
+const textareaStyle = reactive({
+  backgroundColor: '#1c1c1c',
+  boxShadow: '0 0 0 1px #1c1c1c inset',
+  color: '#cacece'
+});
+
 
 onMounted(async() => {
-    console.log(comment.value)
-    if (comment.value.parent_comment_id != null){
-        try{
-            let res = await api.get(`posts/${route.params.id}/comments/${comment.value.id}`)
-            comment["replies"].value = res.data.replies
-        } catch(error){
-            console.log(error)
-        }
-    }
+    edit_body.value = comment.value.body
 })
 
 const formatDate = (date) => {
@@ -111,6 +132,19 @@ const createReply = async (commentId) => {
  
 }
 
+const editComment = async (commentId) => {
+  let data = { body: edit_body.value};
+
+  try{
+    let res = await api.put(`posts/${route.params.id}/comments/${commentId}`, data)
+    comment.value = res.data
+
+  } catch (error){
+    console.log(error)
+  }
+ 
+}
+
 </script>
 
 <style scoped>
@@ -127,5 +161,15 @@ const createReply = async (commentId) => {
   .wotitem {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  .el-dropdown-menu{
+    background-color: #2c2c2c;
+    border-color: #2c2c2c;
+    color: hsla(160, 100%, 37%, 1);
+  }
+
+  .el-popper__arrow{
+    color:#111 !important;
   }
 </style>

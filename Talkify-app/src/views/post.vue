@@ -10,7 +10,7 @@
 
     <div class="wotitem">
       <el-row>
-        <el-input v-model="body" type="textarea" class="dark-input" :rows="3" ></el-input>
+        <el-input v-model="body" type="textarea" :rows="3" :input-style="textareaStyle"></el-input>
       </el-row>
       <br>
       <el-row justify="end">
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { onMounted, ref, inject, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import PostComment from './post_comment.vue'
 import postbox from './postbox.vue'; 
@@ -37,6 +37,12 @@ const api = inject('axios')
 const route = useRoute()
 
 const body = ref('')
+
+const textareaStyle = reactive({
+  backgroundColor: '#1c1c1c',
+  boxShadow: '0 0 0 1px #1c1c1c inset',
+  color: '#cacece'
+});
 
 onMounted(async () => {
     await fetchPost(); 

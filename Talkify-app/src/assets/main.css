@@ -133,3 +133,13 @@ a,
   font-size: 14px;
   color: white;
 }
+
+.el-button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* Centra los elementos horizontalmente */
+  border-radius: 0 !important;
+  background-color: #111 !important;
+  border-color: #444 !important;
+}
