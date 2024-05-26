@@ -17,7 +17,18 @@ const router = createRouter({
       path: '/magazines',
       name: 'magazines',
       component: () => import('../views/magazines.vue')
-    }
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('../views/search.vue'),
+      props: route => ({ query: route.query.query }), 
+    },
+    {
+      path: '/newpost/:type?',
+      name: 'newpost',
+      component:() => import('../views/newpost.vue'),
+    },
   ]
 })
 
