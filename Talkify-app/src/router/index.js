@@ -24,6 +24,17 @@ const router = createRouter({
       name: 'newpost',
       component:() => import('../views/newpost.vue'),
     },
+    {
+      path: '/profile',
+      name: 'profile',
+      component:() => import('../views/profile.vue'),
+    },
+    {
+      path: '/profile/edit',
+      name: 'editprofile',
+      component:() => import('../views/profile.vue'),
+      props: { isEditing: true }
+    },
   ]
 })
 

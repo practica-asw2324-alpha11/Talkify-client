@@ -34,6 +34,7 @@ import navbar from './navbar.vue';
 
 
 
+
 const selectedOption = ref('all');
 
 
@@ -92,7 +93,7 @@ let currentSort = 'top';
 }
 
 .icon-container {
-  margin: 10px 0; /* Añade un margen en la parte superior e inferior */
+  margin: 10px ; /* Añade un margen en la parte superior e inferior */
 }
 
 .el-select-dropdown__item:hover {
