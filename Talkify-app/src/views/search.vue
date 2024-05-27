@@ -29,7 +29,7 @@
     loading.value = true
     const response = await api.get('posts/search', { params: { query: query.value } })
     console.log(response)
-    posts.value = response.data // Asignando directamente response.data
+    posts.value = response.data.posts 
     console.log(posts.value)
   } catch (err) {
     console.error('Error fetching posts:', err)

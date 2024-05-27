@@ -88,7 +88,7 @@
 
     const response = await api.get(url);
     if (currentView.value === 'threads') {
-      posts.value = response.data;
+      posts.value = response.data.posts;
     } else if (currentView.value === 'comments') {
       comments.value = response.data;
     } else if (currentView.value === 'boosts') {
@@ -141,4 +141,3 @@
     margin-top: 20px;
   }
   </style>
-  

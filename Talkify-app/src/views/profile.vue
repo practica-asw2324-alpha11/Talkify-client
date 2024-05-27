@@ -15,10 +15,8 @@
         <p class="user-email">{{ user.email }}</p>
         <p class="user-description">{{ user.description }}</p>    
       </div>
-       <!-- Edit Button -->
-    <div class="edit-button-container">
-      <el-button @click="toggleEditMode">Edit Profile</el-button>
-    </div>
+      <el-button type="button" class="btn btn-primary btn-rectangular" @click="toggleEditMode">Edit Profile</el-button>
+
     </div>
   
    
@@ -49,8 +47,7 @@
         </div>
       </form>
     </div>
-    <profile_tab></profile_tab>
-
+    <profile_tab v-if="!isEditing"></profile_tab>
   </template>
   
   <script setup>
@@ -183,13 +180,15 @@ const isValidFileType = (file) => {
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
+    height: 700px;
   }
   
-  .background-banner-container {
-    width: 100%;
-    padding-top: 50%;
-    position: relative;
-  }
+
+.background-banner-container {
+  width: 100%;
+  padding-top: 25%;
+  position: relative;
+}
   
   .background-banner {
     position: absolute;
@@ -198,18 +197,16 @@ const isValidFileType = (file) => {
     width: 100%;
     height: 400px;
     object-fit: cover;
-
   }
   
   .overlay {
     position: relative;
-    padding-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-  
+
   .avatar-container {
     margin-bottom: 10px;
   }
@@ -242,7 +239,7 @@ const isValidFileType = (file) => {
   
   .edit-button-container {
     margin-bottom: 20px; 
-    margin-left: 700px;
+    flex: 1;
   }
   
   .form-group {
@@ -257,12 +254,11 @@ const isValidFileType = (file) => {
   background-color: #555;
   color: #ffffff;
 }
-
 .btn-rectangular {
   padding: 10px 20px;
   border-radius: 4px;
-  background-color: #6c757d;
-  color: #2d2b2b;
+  background-color: #000; 
+  color: #fff;
 }
 
 .btn-rectangular.btn-secondary {
