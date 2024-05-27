@@ -1,105 +1,113 @@
 <template>
-    <div>
-      <div class="sub-navbar wotitem">
-        <div>
-          <button @click="setView('threads')" :class="{ active: currentView === 'threads' }">Threads</button>
-          <button @click="setView('comments')" :class="{ active: currentView === 'comments' }">Comments</button>
-          <button @click="setView('boosts')" :class="{ active: currentView === 'boosts' }">Boosts</button>
-        </div>
-      </div>
-  
-      <div class="content-container">
-        <div v-if="currentView === 'threads'">
-          <div class="sub-navbar wotitem">
-            <button @click="setSort('top')">Top</button>
-            <button @click="setSort('newest')">Newest</button>
-            <button @click="setSort('commented')">Commented</button>
-          </div>
-          <div id="posts">
-            <div v-for="post in posts" :key="post.id">
-                    <postbox :post="post" />
-            </div>          
-        </div>
-        </div>
-  
-        <div v-if="currentView === 'comments'">
-          <div class="sub-navbar wotitem">
-            <button @click="setSort('top')">Top</button>
-            <button @click="setSort('newest')">Newest</button>
-            <button @click="setSort('oldest')">Oldest</button>
-          </div>
-          <div id="comments">
-            <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
-          </div>
-        </div>
-  
-        <div v-if="currentView === 'boosts'">
-          <div v-for="post in boostedPosts" :key="post.id">
-                <postbox :post="post" />
-        </div> 
-        </div>
+  <div>
+    <div class="sub-navbar wotitem">
+      <div>
+        <button @click="setView('threads')" :class="{ active: currentView === 'threads' }">Threads</button>
+        <button @click="setView('comments')" :class="{ active: currentView === 'comments' }">Comments</button>
+        <button @click="setView('boosts')" :class="{ active: currentView === 'boosts' }" v-if="localStorageUserIdMatchesRoute">Boosts</button>
       </div>
     </div>
-  </template>
-  <script setup>
-  import { ref, inject } from 'vue';
-  import postbox from './postbox.vue';
-  import Comment from './comment.vue'
 
+    <div class="content-container">
+      <div v-if="currentView === 'threads'">
+        <div class="sub-navbar wotitem">
+          <button @click="setSort('top')">Top</button>
+          <button @click="setSort('newest')">Newest</button>
+          <button @click="setSort('commented')">Commented</button>
+        </div>
+        <div id="posts">
+          <div v-for="post in posts" :key="post.id">
+            <postbox :post="post" />
+          </div>          
+        </div>
+      </div>
 
-  const currentView = ref('threads');
-  const posts = ref([]);
-  const comments = ref([]);
-  const boostedPosts = ref([]);
-  const sortCriteria = ref(''); 
-  const userId = localStorage.getItem('selectedUser');
-  const api = inject('axios');
+      <div v-if="currentView === 'comments'">
+        <div class="sub-navbar wotitem">
+          <button @click="setSort('top')">Top</button>
+          <button @click="setSort('newest')">Newest</button>
+          <button @click="setSort('oldest')">Oldest</button>
+        </div>
+        <div id="comments">
+          <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
+        </div>
+      </div>
 
+      <div v-if="currentView === 'boosts'">
+        <div v-for="post in boostedPosts" :key="post.id">
+          <postbox :post="post" />
+        </div> 
+      </div>
+    </div>
+  </div>
+</template>
 
-  const setView = (view) => {
-    currentView.value = view;
-    sortCriteria.value = ''; 
-    
-    fetchData();
-  };
+<script setup>
+import { ref, inject, defineProps,computed } from 'vue';
+import postbox from './postbox.vue';
+import Comment from './comment.vue';
 
-  const setSort = (criteria) => {
-    sortCriteria.value = criteria;
-    fetchData();
-  };
+const currentView = ref('threads');
+const posts = ref([]);
+const comments = ref([]);
+const boostedPosts = ref([]);
+const sortCriteria = ref(''); 
+const api = inject('axios');
 
-  const fetchData = async () => {
-    let url;
-    if (currentView.value === 'threads') {
-      url = `/users/${userId}/posts`;
-      if (sortCriteria.value) {
-      url += `?sort_by=${sortCriteria.value}`;
-    }
-    } else if (currentView.value === 'comments') {
-      url = `/users/${userId}/comments`;
-      if (sortCriteria.value) {
-      url += `?sort_by=${sortCriteria.value}`;
-    }
-    } else if (currentView.value === 'boosts') {
-      url = `/users/${userId}/boosts`;
-    }
-
-   
-
-    const response = await api.get(url);
-    if (currentView.value === 'threads') {
-      posts.value = response.data.posts;
-    } else if (currentView.value === 'comments') {
-      comments.value = response.data;
-    } else if (currentView.value === 'boosts') {
-      boostedPosts.value = response.data.boosted_posts;
-    }
-    console.log(response.data)
-
-  };
-
+const setView = (view) => {
+  currentView.value = view;
+  sortCriteria.value = ''; 
   fetchData();
+};
+
+
+const props = defineProps({
+  userId: {
+    type: String, 
+    required: true 
+  }
+});
+
+
+const localStorageUserIdMatchesRoute = computed(() => {
+    const localStorageUserId = localStorage.getItem('selectedUser');
+    return localStorageUserId === props.userId;
+  });
+
+const setSort = (criteria) => {
+  sortCriteria.value = criteria;
+  fetchData();
+};
+
+const fetchData = async () => {
+  let url;
+  if (currentView.value === 'threads') {
+    url = `/users/${props.userId}/posts`;
+    if (sortCriteria.value) {
+      url += `?sort_by=${sortCriteria.value}`;
+    }
+  } else if (currentView.value === 'comments') {
+    url = `/users/${props.userId}/comments`;
+    if (sortCriteria.value) {
+      url += `?sort_by=${sortCriteria.value}`;
+    }
+  } else if (currentView.value === 'boosts') {
+    url = `/users/${props.userId}/boosts`;
+  }
+
+  const response = await api.get(url);
+  if (currentView.value === 'threads') {
+    posts.value = response.data.posts;
+  } else if (currentView.value === 'comments') {
+    comments.value = response.data;
+  } else if (currentView.value === 'boosts') {
+    boostedPosts.value = response.data.boosted_posts;
+  }
+};
+
+fetchData();
 </script>
+
 
   
   <style scoped>
