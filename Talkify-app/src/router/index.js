@@ -19,6 +19,16 @@ const router = createRouter({
       component: () => import('../views/magazines.vue')
     },
     {
+      path: '/magazine/:id',
+      name: 'magazine',
+      component: () => import('../views/magazine.vue')
+    },
+    {
+      path: '/newmagazine',
+      name: 'newmagazine',
+      component: () => import('../views/newmagazine.vue')
+    },
+    {
       path: '/search',
       name: 'search',
       component: () => import('../views/search.vue'),
