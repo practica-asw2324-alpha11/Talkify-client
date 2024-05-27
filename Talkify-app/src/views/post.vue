@@ -67,6 +67,7 @@ const route = useRoute()
 const router = useRouter()
 
 
+
 const fetchPost = async () => {
   try {
     let response = await api.get(`posts/${route.params.id}`)

@@ -47,11 +47,12 @@
         </div>
       </form>
     </div>
-    <profile_tab v-if="!isEditing"></profile_tab>
+    <profile_tab v-if="!isEditing" :userId="userId1"></profile_tab>
   </template>
   
   <script setup>
-  import { onMounted, ref, inject } from 'vue';
+  import { onMounted, ref, inject, defineProps } from 'vue';
+
   import { useRoute, useRouter } from 'vue-router';
   import navbar from './navbar.vue';
   import profile_tab from './profile_tab.vue';
@@ -60,6 +61,8 @@
   const route = useRoute();
   const router = useRouter();
   const api = inject('axios');
+  const userId1 = ref(localStorage.getItem('selectedUser'));
+
   
   const isEditing = ref(route.query.isEditing === 'true');
   const user = ref({});
@@ -79,6 +82,7 @@
       }
       const response = await api.get(`users/${userId}`);
       user.value = response.data;
+      console.log("USER CHARGED")
       console.log(user.value);
       formData.value = { ...user.value, avatar: null, background: null }; 
     } catch (error) {

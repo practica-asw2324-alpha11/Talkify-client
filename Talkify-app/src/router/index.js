@@ -35,6 +35,12 @@ const router = createRouter({
       component:() => import('../views/profile.vue'),
       props: { isEditing: true }
     },
+    {
+      path: '/users/:id',
+      name: 'user',
+      component: () => import('../views/users.vue'),
+      props: { isEditing: false }
+    },
   ]
 })
 
