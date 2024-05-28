@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <navbar></navbar>
-    <div class="sub-navbar">
-      <div>
-        <router-link :to="{ path: '/magazines', query: { sort_by: 'threads' } }">Most Threads</router-link>
-        <router-link :to="{ path: '/magazines', query: { sort_by: 'comments' } }">Most Comments</router-link>
-        <router-link :to="{ path: '/magazines', query: { sort_by: 'subscribers' } }">Most Subscribers</router-link>
+    <div class="sub-navbar wotitem">
+      <div style="font-size: 18px; margin-left: 80px;">
+        <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('threads')">Most threads</el-button>
+        <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('comments')">Most commented</el-button>
+        <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('subscribers')">Most subscribers</el-button>
       </div>
     </div>
     <div class="wotbody">
@@ -26,16 +26,11 @@
               <td class="magazine-td">{{ magazine.comments }}</td>
               <td class="magazine-td" style="display: flex; flex-direction: row; justify-content: center;">
                 <div class="user_actions_mag">
-                  <i style="margin: 10px 5px 5px 5px;" class="fas fa-users"></i> &nbsp {{ magazine.subscribers }} &nbsp
+                  <i style="margin: 10px 5px 5px 5px;"></i> &nbsp {{ magazine.subscribers }} <el-icon><User/></el-icon> &nbsp
                 </div>
                 <div class="user_actions_mag">
-                  <template v-if="userSignedIn">
-                    <button v-if="currentMagazines.includes(magazine.id)" @click="unsubscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Unsubscribe</button>
-                    <button v-else @click="subscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Subscribe</button>
-                  </template>
-                  <template v-else>
-                    <router-link to="/login" class="btn btn-primary btn-rectangular-mag">Subscribe</router-link>
-                  </template>
+                  <el-button v-if="magazine.isSubscribed" @click.prevent="unsubscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Unsubscribe</el-button>
+                  <el-button v-else @click.prevent="subscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Subscribe</el-button>
                 </div>
               </td>
             </tr>
@@ -49,6 +44,7 @@
 <script setup>
 	import { onMounted, ref, inject } from 'vue'
   import navbar from './navbar.vue'
+  import { ElButton, ElIcon } from 'element-plus'
 
 	const magazines = ref([])
 	const api = inject('axios')
@@ -65,11 +61,37 @@
         }
       });
       magazines.value = response.data;
-      console.log(posts.value)
     } catch (error) {
       console.error(error);
     }
   }
+
+  const subscribe = async (magazineId) => {
+    try {
+      await api.post(`magazines/${magazineId}/subscribe`)
+      const magazine = magazines.value.find(m => m.id === magazineId)
+      if (magazine) {
+        magazine.isSubscribed = true
+        magazine.subscribers += 1
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const unsubscribe = async (magazineId) => {
+    try {
+      await api.delete(`magazines/${magazineId}/subscribe`)
+      const magazine = magazines.value.find(m => m.id === magazineId)
+      if (magazine) {
+        magazine.isSubscribed = false
+        magazine.subscribers -= 1
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
 </script>
 
 <style scoped>
@@ -116,4 +138,27 @@
 	.btn-rectangular-mag:hover {
   	background-color: #2f2f2f !important; /* Color de fondo más oscuro cuando se pasa el ratón por encima */
 	}
+
+  .btn-secondary {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #444;
+  }
+
+  .btn-secondary:hover {
+    background-color: #666;
+  }
+  .sub-navbar button {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .sub-navbar button:hover {
+    background-color: #555;
+  }
 </style>
