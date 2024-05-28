@@ -4,7 +4,7 @@
         <el-row justify="space-between">
             <el-col :span="12">
                 <router-link :to="`/user/${comment.user_id}`">{{ comment.user.full_name }}</router-link>,
-                {{ formatDate(new Date(comment.created_at)) }} ago
+                {{ formatDate(new Date(comment.created_at), comment.created_at) }} ago
             </el-col>
             <el-col :span="12" style="display: flex; justify-content: flex-end">
                 <div class="vote-el-buttons" style="display: flex;">
@@ -26,7 +26,7 @@
           {{ comment.body }}  
         </el-row>
         <el-row>
-            <a style="margin-bottom: 10px; margin-top: 10px;" @click="reply_to = reply_to === '' ? comment.id : ''">reply</a>
+            <a style="margin-bottom: 10px; margin-top: 10px;" @click="onReply">reply</a>
             <el-dropdown v-if="comment.is_author" >
                 <a style="font-size: 1.1em; margin-bottom: 10px; margin-top: 14px">more</a>
                 <template #dropdown>
@@ -93,10 +93,12 @@ const textareaStyle = reactive({
 
 
 onMounted(async() => {
+    console.log(comment.value)
     edit_body.value = comment.value.body
 })
 
-const formatDate = (date) => {
+const formatDate = (date, created_at) => {
+    //console.log(date, created_at)
     return formatDistanceToNow(date)
 }
 
@@ -125,7 +127,7 @@ const createReply = async (commentId) => {
 
   try{
     let res = await api.post(`posts/${route.params.id}/comments`, data)
-    comments.value.push(res.data)
+    comment.value.replies.push(res.data)
   } catch (error){
     console.log(error)
   }
@@ -137,12 +139,17 @@ const editComment = async (commentId) => {
 
   try{
     let res = await api.put(`posts/${route.params.id}/comments/${commentId}`, data)
-    comment.value = res.data
+    comment.value.body = res.data.body
+    edit.value = ''
 
   } catch (error){
     console.log(error)
   }
  
+}
+
+const onReply = () => {
+  reply_to.value = reply_to.value === '' ? comment.value.id : ''
 }
 
 </script>

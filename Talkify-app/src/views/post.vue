@@ -3,9 +3,9 @@
     <postbox id="post" :post="post" />
     
     <div class="wotitem sub-navbar">
-      <router-link class="nav-link">Top</router-link>
-      <router-link class="nav-link">Newest</router-link>
-      <router-link class="nav-link">Oldest</router-link>
+      <a @click="sortComments('top')" class="nav-link">Top</a>
+      <a @click="sortComments('newest')" class="nav-link">Newest</a>
+      <a @click="sortComments('oldest')" class="nav-link">Oldest</a>
     </div>
 
     <div class="wotitem">
@@ -19,7 +19,7 @@
     </div>
 
     <div id="comments">
-        <PostComment class="single-comment" v-for="comment in comments" :key="comment.id" :comment="comment"/>
+        <PostComment v-for="comment in comments" @delete-comment="deleteComment" class="single-comment" :key="comment.id" :comment="comment"></PostComment>
     </div>
 
 </template>
@@ -53,15 +53,22 @@ const fetchPost = async () => {
   try {
     let response = await api.get(`posts/${route.params.id}`);
     post.value = response.data.post;
+    console.log(post.value)
     
     let res = await api.get(`posts/${route.params.id}/comments`);
-    comments.value = res.data
 
-    comments.value = comments.value.filter(c => c.parent_comment_id === null)
+    comments.value = Array.isArray(res.data) ? res.data : [res.data];
+
+    comments.value = comments.value.filter(c => c.parent_comment_id === null);
+    console.log(comments.value);
 
   } catch (error) {
     console.error(error);
   }
+
+  for(let comment of comments.value){
+    console.log(comment);
+}
 }
 
 const createComment = async () => {
@@ -76,6 +83,28 @@ const createComment = async () => {
   }
  
 }
+
+const sortComments = async (param) => {
+
+  let params = {
+    sort_by: param
+  }
+
+  try{
+    let res = await api.get(`posts/${route.params.id}/comments`, {params})
+    comments.value = res.data
+    comments.value = comments.value.filter(i => i.parent_comment_id === null)
+  } catch{
+    console.log(error)
+  }
+}
+
+const deleteComment = (commentId) => {
+  let index = comments.value.findIndex(comment => comment.id === commentId);
+  if (index !== -1) {
+    comments.value.splice(index, 1);
+  }
+};
 
 </script>
 
