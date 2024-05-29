@@ -8,13 +8,10 @@
 			<p>{{magazine.description}}</p>
 			<strong><p>Rules:</p></strong>
 			<p>{{magazine.rules}}</p>
-			<div class="user_actions_mag">
-        <el-button v-if="magazine.isSubscribed" @click.prevent="unsubscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Unsubscribe</el-button>
-        <el-button v-else @click.prevent="subscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Subscribe</el-button>
-      </div>
+			
 		</div>
 		<div class="infomagazine wotitem">
-			<p><strong>Created: </strong>{{calculateDate(magazine.created_at)}}</p>
+			<p><strong>Created: </strong>{{magazine.created_at}}</p>
 			<p><strong>Subscribers: </strong>{{magazine.subscribers}}</p>
 			<p><strong>Threads: </strong>{{magazine.threads}}</p>
 			<p><strong>Comments: </strong>{{magazine.comments}}</p>
@@ -35,7 +32,7 @@
 </template>
 
 <script setup>
-	import { onMounted, ref, inject } from 'vue'
+	import { onMounted, ref, inject, watch } from 'vue'
 	import { useRoute, useRouter } from 'vue-router'
 	import postbox from './postbox.vue'
 	import navbar from './navbar.vue'
@@ -47,23 +44,16 @@
 	const route = useRoute()
 	const router = useRouter()
 
-	const calculateDate = (createdAt) => {
-		const createdDate = new Date(createdAt)
-		const currentDate = new Date()
-		const diffTime = Math.abs(currentDate - createdDate)
-		const diffDays = Math.floor(diffTime / (1000*60*60*24))
-		if (diffDays === 0) return "today"
-		else if (diffDays === 1) return "yesterday"
-		else return `${diffDays} days ago`
-	}
-
 	const fetchMagazine = async () => {
 		try {
 			let response = await api.get(`magazines/${route.params.id}`)
     	magazine.value = response.data
+			console.log('Dades magazine: ', response.data)
 
 			let postsResponse = await api.get(`magazines/${route.params.id}/posts`)
-			posts.value = postsResponse.data.posts
+			posts.value = postsResponse.data
+			console.log('Dades posts de la magazine: ', postsResponse.data)
+
 		} catch (error) {
 			console.error(error)
 		}
@@ -86,25 +76,11 @@
 		await fetchMagazine()
 	})
 
-	const subscribe = async (magazineId) => {
-    try {
-      await api.post(`magazines/${magazineId}/subscribe`)
-      magazine.value.isSubscribed = true
-      magazine.value.subscribers += 1
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const unsubscribe = async (magazineId) => {
-    try {
-      await api.delete(`magazines/${magazineId}/subscribe`)
-      magazine.value.isSubscribed = false
-      magazine.value.subscribers -= 1
-    } catch (error) {
-      console.error(error)
-    }
-  }
+	watch(posts, (newPosts) => {
+  	newPosts.forEach(post => {
+    	console.log('Post:', post)
+  	})
+	})
 </script>
 
 <style scoped>
@@ -131,18 +107,5 @@
   	margin-inline-start: 0px;
   	margin-inline-end: 0px;
   	color: #ffffff;
-	}
-
-	.btn-rectangular-mag {
-  border-radius: 0;
-  background-color: #2c2c2c;
-  border: 1px solid #4a4a4a;
-  color: #fff;
-  font-weight: 700;
-  padding: 10px 20px;
-}
-
-	.btn-rectangular-mag:hover {
-  	background-color: #2f2f2f !important; /* Color de fondo más oscuro cuando se pasa el ratón por encima */
 	}
 </style>

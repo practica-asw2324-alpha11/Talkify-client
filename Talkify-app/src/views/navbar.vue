@@ -76,8 +76,7 @@
 });
 
   const handleNewPost = (type) => {
-  if (type == 'magazine') router.push({name: 'newmagazine'})
-  else router.push({ name: 'newpost', params: { type } });
+  router.push({ name: 'newpost', params: { type } });
 };
 
   const handleSearch = () => {

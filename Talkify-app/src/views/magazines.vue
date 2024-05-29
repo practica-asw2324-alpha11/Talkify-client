@@ -13,7 +13,7 @@
         <table class="magazine-table">
           <thead>
             <tr>
-              <th class="magazine-th">Nombre</th>
+              <th class="magazine-th">Name</th>
               <th class="magazine-th"># Threads</th>
               <th class="magazine-th"># Comments</th>
               <th class="magazine-th">Subscribe/Unsubscribe</th>

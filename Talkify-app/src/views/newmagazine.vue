@@ -2,35 +2,31 @@
 	<div>
 		<navbar></navbar>
 		<div class="sub-navbar">
-      <div style="font-size: 18px; margin-left: 80px;">
-        <a href="#" @click.prevent="goToNewPost('link')" :class="{ 'active': selectedPostType === 'link' }">Link</a>
-        <a href="#" @click.prevent="goToNewPost('thread')" :class="{ 'active': selectedPostType === 'thread' }">Thread</a>
-        <a href="#">Magazine</a>
-      </div>
-    </div>
-		<div class="wotitem">
-			<h2>Crear Nueva Magazine</h2>
-			<form @submit.prevent="createMagazine">
-				<div class="form-group">
-					<label for="name">Nombre:</label>
-					<input type="text" v-model="formData.name" id="name" class="form-control" required/>
+			<div style="font-size: 18px; margin-left: 80px;">
+				<div class="wotitem">
+					<form @submit.prevent="createMagazine">
+						<div class="form-group">
+							<label for="name">Name:</label>
+							<input type="text" v-model="formData.name" id="name" class="form-control" required/>
+						</div>
+						<div class="form-group">
+							<label for="title">Title:</label>
+							<input type="text" v-model="formData.title" id="title" class="form-control" required/>
+						</div>
+						<div class="form-group">
+							<label for="description">Description:</label>
+							<textarea v-model="formData.description" id="description" class="form-control" rows="3"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="rules">Rules:</label>
+							<textarea v-model="formData.rules" id="rules" class="form-control" rows="3"></textarea>
+						</div>
+						<div class="form-group text-right">
+							<el-button type="submit" class="btn btn-secondary btn-rectangular" @click="createMagazine">Create Magazine</el-button>
+						</div>
+					</form>
 				</div>
-				<div class="form-group">
-					<label for="title">Título:</label>
-					<input type="text" v-model="formData.title" id="title" class="form-control" required/>
-				</div>
-				<div class="form-group">
-					<label for="description">Descripción:</label>
-					<textarea v-model="formData.description" id="description" class="form-control" rows="3"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="rules">Reglas:</label>
-					<textarea v-model="formData.rules" id="rules" class="form-control" rows="3"></textarea>
-				</div>
-				<div class="form-group text-right">
-					<el-button type="submit" class="btn btn-secondary btn-rectangular" @click="createMagazine">Crear Magazine</el-button>
-				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 </template>
@@ -59,10 +55,6 @@
 		} catch (error) {
 			console.error(error)
 		}
-	}
-
-	const goToNewPost = (postType) => {
-		router.push({name: `newpost`, query: {postType}})
 	}
 </script>
 
