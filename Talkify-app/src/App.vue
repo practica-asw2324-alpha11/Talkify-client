@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <main>
+      <navbar/>
       <RouterView />
     </main>
   </div>
@@ -8,6 +9,7 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import navbar from './views/navbar.vue';
 import 'element-plus/theme-chalk/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 </script>

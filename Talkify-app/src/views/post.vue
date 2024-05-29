@@ -1,48 +1,26 @@
 <template>
   <div>
-    <navbar></navbar>
-    <div id="post" class="wotitem">
-      <postbox :post="post" />
-      <div class="post-body">
-        {{ post.body }}
-      </div>
-      <div class="post-actions">
-        <el-button class="btn-primary btn-rectangular" @click="toggleEditMode">Editar</el-button>
-        <el-button class="btn-danger btn-rectangular" @click="deletePost">Eliminar</el-button>
-      </div>
+    <postbox/>
+    
+
+    <div class="wotitem sub-navbar">
+      <a @click="sortComments('top')" class="nav-link">Top</a>
+      <a @click="sortComments('newest')" class="nav-link">Newest</a>
+      <a @click="sortComments('oldest')" class="nav-link">Oldest</a>
     </div>
 
-
-    <div v-if="isEditing" class="edit-form-container">
-      <h2>Editar Publicación</h2>
-      <form @submit.prevent="updatePost">
-        <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" v-model="formData.title" id="title" class="form-control" required />
-        </div>
-        <div v-if="post.link" class="form-group">
-          <label for="link-url">URL del Enlace:</label>
-          <input type="text" v-model="formData.url" id="link-url" class="form-control" required />
-        </div>
-        <div class="form-group">
-          <label for="thread-body">Contenido del Thread:</label>
-          <textarea v-model="formData.body" id="thread-body" class="form-control" rows="5" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="magazine">Magazine:</label>
-          <select v-model="formData.magazine_id" id="magazine" class="form-control">
-            <option v-for="magazine in magazines" :key="magazine.id" :value="magazine.id">{{ magazine.name }}</option>
-          </select>
-        </div>
-        <div class="form-group text-right">
-          <el-button type="submit" class="btn btn-secondary btn-rectangular">Guardar Cambios</el-button>
-          <el-button type="button" class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
-        </div>
-      </form>
+    <div class="wotitem">
+      <el-row>
+        <el-input v-model="body" type="textarea" :rows="3" :input-style="textareaStyle"></el-input>
+      </el-row>
+      <br>
+      <el-row justify="end">
+        <el-button @click="createComment"> Add Comment! </el-button>
+      </el-row>
     </div>
 
     <div id="comments">
-      <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
+        <PostComment v-for="comment in comments" @delete-comment="deleteComment" class="single-comment" :key="comment.id" :comment="comment"></PostComment>
     </div>
 
     
@@ -50,31 +28,36 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { onMounted, ref, inject, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Comment from './comment.vue'
 import postbox from './postbox.vue'
 import navbar from './navbar.vue'
 import { ElButton } from 'element-plus'
+import PostComment from './post_comment.vue'
 
 const post = ref({})
 const comments = ref([])
-const isEditing = ref(false)
-const formData = ref({ title: '', url: '', body: '', magazine_id: null })
+
 const magazines = ref([])
 const api = inject('axios')
 const route = useRoute()
-const router = useRouter()
 
 
+const body = ref('')
 
-const fetchPost = async () => {
-  try {
-    let response = await api.get(`posts/${route.params.id}`)
-    post.value = response.data.post
+const textareaStyle = reactive({
+  backgroundColor: '#1c1c1c',
+  boxShadow: '0 0 0 1px #1c1c1c inset',
+  color: '#cacece'
+});
 
-    let res = await api.get(`posts/${route.params.id}/comments`)
-    comments.value = res.data
+const fetchComments = async () => {
+  try{
+    let res = await api.get(`posts/${route.params.id}/comments`);
+
+    comments.value = Array.isArray(res.data) ? res.data : [res.data];
+
+    comments.value = comments.value.filter(c => c.parent_comment_id === null);
 
     let magResponse = await api.get(`magazines`)
     magazines.value = magResponse.data
@@ -83,49 +66,62 @@ const fetchPost = async () => {
   }
 }
 
-const toggleEditMode = () => {
-  isEditing.value = !isEditing.value
-  if (isEditing.value) {
-    formData.value = {
-      title: post.value.title,
-      url: post.value.link ? post.value.url : '',
-      body: !post.value.link ? post.value.body : '',
-      magazine_id: post.value.magazine_id || null,
-    }
+const createComment = async () => {
+  let data = { body: body.value, parent_comment_id: null};
+  body.value = ''
+
+  try{
+    let res = await api.post(`posts/${route.params.id}/comments`, data)
+    comments.value.push(res.data)
+  } catch (error){
+    console.error(error);
+  }
+
+}
+
+const sortComments = async (param) => {
+
+  let params = {
+    sort_by: param
+  }
+
+  try{
+    let res = await api.get(`posts/${route.params.id}/comments`, {params})
+    comments.value = res.data
+    comments.value = comments.value.filter(i => i.parent_comment_id === null)
+  } catch{
+    console.log(error)
   }
 }
 
-const updatePost = async () => {
-  try {
-    let payload = {
-      title: formData.value.title,
-      url: post.value.link ? formData.value.url : null,
-      body: !post.value.link ? formData.value.body : null,
-      magazine_id: formData.value.magazine_id,
-    }
-    await api.put(`posts/${route.params.id}`, payload)
-    await fetchPost()
-    isEditing.value = false
-  } catch (error) {
-    console.error(error)
+const deleteComment = (commentId) => {
+  let index = comments.value.findIndex(c => c.id === commentId);
+  if (index !== -1) {
+    comments.value.splice(index, 1);
   }
-}
 
-const deletePost = async () => {
-  try {
-    await api.delete(`posts/${route.params.id}`)
-    router.push("/")
-  } catch (error) {
-    console.error(error)
-  }
-}
+};
 
-onMounted(async () => {
-  await fetchPost()
+onMounted( async () => {
+  await fetchComments()
 })
 </script>
 
 <style scoped>
+.nav-link {
+  margin-right: 20px;
+}
+
+.el-input {
+  background-color: #000;
+  color: #fff;
+}
+
+.single-comment{
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
 .wotitem {
   border: 2px solid #3d3c3d;
   margin: 20px auto;
