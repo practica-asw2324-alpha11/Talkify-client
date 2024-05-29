@@ -1,6 +1,5 @@
 <template>
     <div class="search-results-container">
-      <navbar></navbar>
       <div class="wotbody">
         <div v-for="post in posts" :key="post.id">
             <postbox :post="post" />
