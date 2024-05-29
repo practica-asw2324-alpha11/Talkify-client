@@ -45,8 +45,8 @@
 
 <script setup>
 import { ref, inject, defineProps,computed, onMounted } from 'vue';
-import postbox from '../../components/Posts/postbox.vue';
-import PostComment from '../../components/Comments/post_comment.vue';
+import postbox from './postbox.vue';
+import PostComment from './post_comment.vue';
 
 const currentView = ref('threads');
 const posts = ref([]);

@@ -9,7 +9,7 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import navbar from './components/App/navbar.vue';
+import navbar from './views/navbar.vue';
 import 'element-plus/theme-chalk/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 </script>

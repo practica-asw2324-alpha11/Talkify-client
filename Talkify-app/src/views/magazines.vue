@@ -42,6 +42,7 @@
 
 <script setup>
 	import { onMounted, ref, inject } from 'vue'
+  import navbar from './navbar.vue'
   import { ElButton, ElIcon } from 'element-plus'
 
 	const magazines = ref([])

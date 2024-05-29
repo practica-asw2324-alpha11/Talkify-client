@@ -5,7 +5,7 @@
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div>
               <router-link to="/">
-                <img src="../../assets/Talkify_logo-transformed.png" alt="Talkify" width="100">
+                <img src="../assets/Talkify_logo-transformed.png" alt="Talkify" width="100">
               </router-link>
             </div>
             <menu class="head-nav__menu">
