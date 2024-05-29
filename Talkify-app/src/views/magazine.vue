@@ -18,13 +18,13 @@
 			<p><strong>Threads: </strong>{{magazine.threads}}</p>
 			<p><strong>Comments: </strong>{{magazine.comments}}</p>
 		</div>
-		<div class="sub-navbar wotitem">
-			<div style="font-size: 18px; margin-left: 80px;">
+		<el-row class="sub-navbar wotitem">
+			<el-col span="10" style="display:flex;">
     		<el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('top')">Top</el-button>
     		<el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('newest')">Newest</el-button>
     		<el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('commented')">Commented</el-button>
-  		</div>
-		</div>
+  		</el-col>
+		</el-row>
 		<div>
 			<div v-for="post in posts" :key="post.id">
       	<postbox :post="post" />
