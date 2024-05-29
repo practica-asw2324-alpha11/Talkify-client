@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<navbar></navbar>
 		<div id="magazine" class=" infomagazine wotitem">
 			<h2>{{magazine.name}}</h2>
 			<strong><p>@{{magazine.title}}@talkify</p></strong>

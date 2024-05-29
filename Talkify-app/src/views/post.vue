@@ -20,7 +20,7 @@
     </div>
 
     <div id="comments">
-        <PostComment v-for="comment in comments" @delete-comment="deleteComment" class="single-comment" :key="comment.id" :comment="comment"></PostComment>
+        <PostComment v-for="comment in comments" @delete-comment="deleteComment" class="single-comment" :key="comment.id" :comment="comment" :show_relpies="true"></PostComment>
     </div>
 
     

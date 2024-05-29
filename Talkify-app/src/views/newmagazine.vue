@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<navbar></navbar>
 		<div class="sub-navbar">
 			<div style="font-size: 18px; margin-left: 80px;">
         <a href="#" @click.prevent="goToNewPost('link')" :class="{ 'active': selectedPostType === 'link' }">Link</a>

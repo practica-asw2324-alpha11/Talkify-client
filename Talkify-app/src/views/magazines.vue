@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <navbar></navbar>
     <div class="sub-navbar wotitem">
       <div style="font-size: 18px; margin-left: 80px;">
         <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('threads')">Most threads</el-button>

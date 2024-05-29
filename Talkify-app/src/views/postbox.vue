@@ -28,7 +28,7 @@
               <strong>{{ post.user ? post.user.full_name : 'Anonymous' }}</strong>
             </router-link>
             {{ timeAgo(post.created_at) }} ago to magazine 
-            <router-link :to="{ name: 'magazine', params: {id: post.magazine.id}}">
+            <router-link v-if="magazine && magazine.user" :to="{ name: 'magazine', params: {id: post.magazine.id}}">
               <strong> {{ post.magazine ? post.magazine.title : 'Unknown Magazine' }}</strong>
             </router-link>
           </p>
