@@ -35,7 +35,7 @@
                             <span style="color: hsla(160, 100%, 37%, 1);" @click="edit = edit === '' ? comment.id : ''">edit</span>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <span style="color: hsla(160, 100%, 37%, 1);" >delete</span>
+                            <span style="color: hsla(160, 100%, 37%, 1);" @click="onDelete" >delete</span>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject, reactive } from 'vue'
+import { onMounted, ref, inject, reactive, emit } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatDistanceToNow } from 'date-fns';
 
@@ -93,7 +93,6 @@ const textareaStyle = reactive({
 
 
 onMounted(async() => {
-    console.log(comment.value)
     edit_body.value = comment.value.body
 })
 
@@ -150,6 +149,23 @@ const editComment = async (commentId) => {
 
 const onReply = () => {
   reply_to.value = reply_to.value === '' ? comment.value.id : ''
+}
+
+const onDelete = async () => {
+  try{
+    let res = api.delete(`posts/${route.params.id}/comments/${comment.value.id}`)
+    console.log(res)
+    if(res.statusCode == 200){
+      if(comment.value.parent_comment_id === null){
+        emit('delete-comment', comment)
+      }
+      else{
+        window.location.reload();
+      }
+    }
+  } catch(error){
+    console.log(error)
+  }
 }
 
 </script>

@@ -53,22 +53,16 @@ const fetchPost = async () => {
   try {
     let response = await api.get(`posts/${route.params.id}`);
     post.value = response.data.post;
-    console.log(post.value)
     
     let res = await api.get(`posts/${route.params.id}/comments`);
 
     comments.value = Array.isArray(res.data) ? res.data : [res.data];
 
     comments.value = comments.value.filter(c => c.parent_comment_id === null);
-    console.log(comments.value);
 
   } catch (error) {
     console.error(error);
   }
-
-  for(let comment of comments.value){
-    console.log(comment);
-}
 }
 
 const createComment = async () => {
@@ -100,6 +94,7 @@ const sortComments = async (param) => {
 }
 
 const deleteComment = (commentId) => {
+  console.log("delte")
   let index = comments.value.findIndex(comment => comment.id === commentId);
   if (index !== -1) {
     comments.value.splice(index, 1);
