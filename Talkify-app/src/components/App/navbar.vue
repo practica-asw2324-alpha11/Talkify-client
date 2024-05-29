@@ -5,7 +5,7 @@
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div>
               <router-link to="/">
-                <img src="../assets/Talkify_logo-transformed.png" alt="Talkify" width="100">
+                <img src="../../assets/Talkify_logo-transformed.png" alt="Talkify" width="100">
               </router-link>
             </div>
             <menu class="head-nav__menu">
@@ -46,8 +46,6 @@
           </nav>
         </div>
       </header>
-  
-      <router-view></router-view>
     </div>
   </template>
   
@@ -76,7 +74,8 @@
 });
 
   const handleNewPost = (type) => {
-  router.push({ name: 'newpost', params: { type } });
+    if (type == 'magazine') router.push({name: 'newmagazine'})
+    else router.push({ name: 'newpost', params: { type } });
 };
 
   const handleSearch = () => {

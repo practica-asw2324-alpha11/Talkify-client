@@ -1,11 +1,10 @@
 <template>
     <div>
-      <navbar></navbar>
       <div class="sub-navbar">
         <div style="font-size: 18px; margin-left: 80px;">
           <a href="#" @click.prevent="selectedPostType = 'link'" :class="{ 'active': selectedPostType === 'link' }">Link</a>
           <a href="#" @click.prevent="selectedPostType = 'thread'" :class="{ 'active': selectedPostType === 'thread' }">Thread</a>
-          <a href="#" @click.prevent="selectedPostType = 'magazine'" :class="{ 'active': selectedPostType === 'magazine' }">Magazine</a>
+          <a href="#" @click.prevent="goToNewMagazine" :class="{ 'active': selectedPostType === 'magazine' }">Magazine</a>
         </div>
       </div>
       <div class="wotitem">
@@ -40,7 +39,6 @@
   <script setup>
   import { ref, inject, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import navbar from './navbar.vue'
   import { ElButton } from 'element-plus'
   
   const selectedPostType = ref('link')
@@ -80,6 +78,10 @@
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const goToNewMagazine = () => {
+    router.push('/newmagazine')
   }
   </script>
   

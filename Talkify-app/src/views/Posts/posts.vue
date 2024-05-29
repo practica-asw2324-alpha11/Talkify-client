@@ -1,24 +1,27 @@
 <template>
   <div class="container">
-    <navbar></navbar>
 
-    <div class="sub-navbar wotitem">
-  <div style="font-size: 18px; margin-left: 80px;">
-    <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('top', 'all')">Top</el-button>
-    <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('newest', 'all')">Newest</el-button>
-    <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('commented', 'all')">Commented</el-button>
-  </div>
-      <div class="dropdown" >
-    <el-select v-model="selectedOption" placeholder="Select an option"   suffix-icon= "Filter" @change="handleDropdownChange" color="rgb(0,0,0)"  >
-      <el-option label="All" value=""></el-option>
-      <el-option label="Links" value="links"></el-option>
-      <el-option label="Threads" value="threads"></el-option>
-    </el-select>
-  </div>
+    <div>
+      <el-row class="sub-navbar wotitem">
+        <el-col :span="10" style="display:flex;">
+          <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('top', 'all')">Top</el-button>
+          <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('newest', 'all')">Newest</el-button>
+          <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('commented', 'all')">Commented</el-button>
+        </el-col>
+        <el-col :span="5" style="display: flex; justify-content: flex-end;">
+          <div class="dropdown" >
+            <el-select v-model="selectedOption" placeholder="Select an option"   suffix-icon= "Filter" @change="handleDropdownChange" color="rgb(0,0,0)"  >
+              <el-option label="All" value=""></el-option>
+              <el-option label="Links" value="links"></el-option>
+              <el-option label="Threads" value="threads"></el-option>
+            </el-select> 
+          </div>
+        </el-col>
+      </el-row>
     </div>
       
     <div v-for="post in posts" :key="post.id">
-      <postbox :post="post" />
+      <postbox :post="post"/>
     </div>
   </div>
 </template>
@@ -27,18 +30,9 @@
 
 import { onMounted, ref, inject } from 'vue'
 import { ElSelect, ElOption, ElIcon, ElInput} from 'element-plus';
-import postbox from './postbox.vue'; 
-import navbar from './navbar.vue'; 
-
-
-
-
-
+import postbox from '../../components/Posts/postbox.vue'; 
 
 const selectedOption = ref('all');
-
-
-
 
 const handleSortChange = (sortBy) => {
   fetchPosts(sortBy, 'all');

@@ -5,17 +5,18 @@
   padding: 2rem;
   font-weight: normal;
 }
+
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: rgb(182, 127, 225);
   transition: 0.4s;
   padding: 3px;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: hsla(279, 100%, 40%, 0.2);
   }
 }
 
@@ -40,11 +41,10 @@ a,
 
 .sub-navbar {
   display: flex;
-  justify-content: space-between;
   padding: 1rem;
-  background-color: #333;
-  color: #fff;
+  background-color: #222 !important;
   width: 100%;
+  height: auto;
 }
 
 .navbar-icons {
@@ -82,19 +82,19 @@ a,
 .post-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
 }
 
 .post-content {
   flex: 1;
-  align-items: center; 
+  align-items: center;
   margin-left: 50px;
   color: #fff;
 
 }
 
 .vote-buttons {
-  margin-right: 10px; 
+  margin-right: 10px;
 }
 
 .vote {
@@ -126,12 +126,22 @@ a,
 
 .first-part h2 a {
   color: white;
-  
+
 }
 
 .first-part span {
   font-size: 14px;
   color: white;
+}
+
+.el-button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* Centra los elementos horizontalmente */
+  border-radius: 0 !important;
+  background-color: #111 !important;
+  border-color: #444 !important;
 }
 
 /* Estilos para la barra de navegación */
@@ -200,7 +210,8 @@ a,
   align-items: center;
 }
 
-.navbar-icons a, .navbar-icons button {
+.navbar-icons a,
+.navbar-icons button {
   color: #fff;
   margin-right: 10px;
   cursor: pointer;
@@ -208,7 +219,8 @@ a,
   position: relative;
 }
 
-.navbar-icons a::after, .navbar-icons button::after {
+.navbar-icons a::after,
+.navbar-icons button::after {
   content: "";
   display: block;
   width: 0;
@@ -220,7 +232,8 @@ a,
   transition: width 0.3s ease;
 }
 
-.navbar-icons a:hover::after, .navbar-icons button:hover::after {
+.navbar-icons a:hover::after,
+.navbar-icons button:hover::after {
   width: 100%;
 }
 
@@ -243,13 +256,15 @@ a,
   transition: background-color 0.3s ease;
 }
 
-.sub-navbar a, .sub-navbar .dropdown-btn {
+.sub-navbar a,
+.sub-navbar .dropdown-btn {
   text-decoration: none;
   color: #fff;
   position: relative;
 }
 
-.sub-navbar a::after, .sub-navbar .dropdown-btn::after {
+.sub-navbar a::after,
+.sub-navbar .dropdown-btn::after {
   content: "";
   display: block;
   width: 0;
@@ -261,7 +276,7 @@ a,
   transition: width 0.3s ease;
 }
 
-.sub-navbar a:hover::after, .sub-navbar .dropdown-btn:hover::after {
+.sub-navbar a:hover::after,
+.sub-navbar .dropdown-btn:hover::after {
   width: 100%;
 }
-

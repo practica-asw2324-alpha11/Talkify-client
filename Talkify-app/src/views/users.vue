@@ -1,6 +1,4 @@
 <template>
-    <navbar></navbar>
-  
     <div class="profile-header wotitem">
       <div class="background-banner-container">
         <img :src="user.background" class="background-banner" />
@@ -23,8 +21,7 @@
   <script setup>
   import { onMounted, ref, inject, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import navbar from './navbar.vue';
-  import profile_tab from './profile_tab.vue';
+  import profile_tab from './Profile/profile_tab.vue';
   
   const route = useRoute();
   const router = useRouter();
