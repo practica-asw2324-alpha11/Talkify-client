@@ -4,7 +4,7 @@
         <el-row justify="space-between">
             <el-col :span="12">
                 <router-link :to="`/user/${comment.user.id}`">{{ comment.user.full_name }}</router-link>,
-                {{ formatDate(new Date(comment.created_at), comment.created_at) }} ago
+                {{ formatDate(new Date(comment.created_at)) }} ago
             </el-col>
             <el-col :span="12" style="display: flex; justify-content: flex-end">
                 <div class="vote-el-buttons" style="display: flex;">
@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <post_comment style="padding-left: 20px; " v-for="reply in comment.replies" :key="reply.id" :comment="reply"></post_comment>
+    <post_comment v-if="show_relpies" style="padding-left: 20px; " v-for="reply in comment.replies" :key="reply.id" :comment="reply"></post_comment>
 
 </div>
 
@@ -74,7 +74,8 @@ import { useRoute } from 'vue-router'
 import { formatDistanceToNow } from 'date-fns';
 
 const props = defineProps({
-    comment: Object
+    comment: Object,
+    show_relpies: Boolean
 })
 
 const api = inject('axios')
@@ -98,8 +99,7 @@ onMounted(async() => {
     edit_body.value = comment.value.body
 })
 
-const formatDate = (date, created_at) => {
-    //console.log(date, created_at)
+const formatDate = (date) => {
     return formatDistanceToNow(date)
 }
 

@@ -1,6 +1,4 @@
 <template>
-    <navbar></navbar>
-  
     <div class="profile-header wotitem">
       <div class="background-banner-container">
         <img :src="user.background" class="background-banner" />

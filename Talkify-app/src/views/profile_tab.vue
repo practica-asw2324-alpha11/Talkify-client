@@ -28,8 +28,9 @@
           <button @click="setSort('newest')">Newest</button>
           <button @click="setSort('oldest')">Oldest</button>
         </div>
+        <br>
         <div id="comments">
-          <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
+          <PostComment v-for="comment in comments" :key="comment.id" :comment="comment" />
         </div>
       </div>
 
@@ -43,9 +44,9 @@
 </template>
 
 <script setup>
-import { ref, inject, defineProps,computed } from 'vue';
+import { ref, inject, defineProps,computed, onMounted } from 'vue';
 import postbox from './postbox.vue';
-import Comment from './comment.vue';
+import PostComment from './post_comment.vue';
 
 const currentView = ref('threads');
 const posts = ref([]);
@@ -54,10 +55,10 @@ const boostedPosts = ref([]);
 const sortCriteria = ref(''); 
 const api = inject('axios');
 
-const setView = (view) => {
+const setView = async (view) => {
   currentView.value = view;
   sortCriteria.value = ''; 
-  fetchData();
+  await fetchData();
 };
 
 
@@ -100,12 +101,15 @@ const fetchData = async () => {
     posts.value = response.data.posts;
   } else if (currentView.value === 'comments') {
     comments.value = response.data;
+    console.log(comments.value)
   } else if (currentView.value === 'boosts') {
     boostedPosts.value = response.data.boosted_posts;
   }
 };
 
-fetchData();
+onMounted(async () => {
+  await fetchData();
+})
 </script>
 
 
