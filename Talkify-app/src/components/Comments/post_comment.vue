@@ -32,10 +32,10 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>
-                            <span style="color: hsla(160, 100%, 37%, 1);" @click="edit = edit === '' ? comment.id : ''">edit</span>
+                            <span style="color: rgb(182, 127, 225);" @click="edit = edit === '' ? comment.id : ''">edit</span>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <span style="color: hsla(160, 100%, 37%, 1);" @click="onDelete" >delete</span>
+                            <span style="color: rgb(182, 127, 225);" @click="onDelete" >delete</span>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -191,7 +191,7 @@ const onDelete = async () => {
   .el-dropdown-menu{
     background-color: #2c2c2c;
     border-color: #2c2c2c;
-    color: hsla(160, 100%, 37%, 1);
+    color: rgb(182, 127, 225) !important;
   }
 
   .el-popper__arrow{

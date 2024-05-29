@@ -3,11 +3,13 @@
     <postbox/>
     
 
-    <div class="wotitem sub-navbar">
-      <a @click="sortComments('top')" class="nav-link">Top</a>
-      <a @click="sortComments('newest')" class="nav-link">Newest</a>
-      <a @click="sortComments('oldest')" class="nav-link">Oldest</a>
-    </div>
+    <el-row class="wotitem sub-navbar">
+      <el-col :span="10" style="display: flex">
+        <el-button @click="sortComments('top')" class="nav-link">Top</el-button>
+        <el-button @click="sortComments('newest')" class="nav-link">Newest</el-button>
+        <el-button @click="sortComments('oldest')" class="nav-link">Oldest</el-button>
+      </el-col>
+    </el-row>
 
     <div class="wotitem">
       <el-row>
@@ -119,70 +121,5 @@ onMounted( async () => {
 .single-comment{
   margin-bottom: 0;
   margin-top: 0;
-}
-
-.wotitem {
-  border: 2px solid #3d3c3d;
-  margin: 20px auto;
-  padding: 1em;
-  width: 90%;
-  background-color: #3d3c3d;
-  border-color: #4a4a4a;
-  position: relative;
-}
-
-.post-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px; /* Espacio entre los botones */
-}
-
-.el-button.btn-primary {
-  background-color: #000;
-  color: #fff;
-  border: 1px solid #000;
-  padding: 10px 20px;
-  border-radius: 0;
-}
-
-.el-button.btn-danger {
-  background-color: #000;
-  color: #fff;
-  border: 1px solid #000;
-  padding: 10px 20px;
-  border-radius: 0;
-}
-
-.el-button:hover {
-  background-color: #333;
-}
-
-.edit-form-container {
-  background-color: #2a2929;
-  padding: 20px;
-  margin: 20px auto;
-  width: 90%;
-  border: 2px solid #4a4a4a;
-  border-radius: 5px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #1c1c1c;
-  border: 1px solid #373737;
-  color: #cacece;
-  font-size: 1rem;
-}
-
-.btn-secondary {
-  background-color: #444;
-  color: #fff;
-  border: 1px solid #444;
-}
-
-.btn-secondary:hover {
-  background-color: #666;
 }
 </style>
