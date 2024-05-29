@@ -1,6 +1,8 @@
 <template>
-
-    <postbox id="post" :post="post" />
+  <div>
+    <navbar></navbar>
+    <postbox/>
+    
 
     <div class="wotitem sub-navbar">
       <a @click="sortComments('top')" class="nav-link">Top</a>
@@ -22,19 +24,25 @@
         <PostComment v-for="comment in comments" @delete-comment="deleteComment" class="single-comment" :key="comment.id" :comment="comment"></PostComment>
     </div>
 
+    
+  </div>
 </template>
 
 <script setup>
 import { onMounted, ref, inject, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import postbox from './postbox.vue'
+import navbar from './navbar.vue'
+import { ElButton } from 'element-plus'
 import PostComment from './post_comment.vue'
-import postbox from './postbox.vue';
-
 
 const post = ref({})
 const comments = ref([])
+
+const magazines = ref([])
 const api = inject('axios')
 const route = useRoute()
+
 
 const body = ref('')
 
@@ -44,24 +52,18 @@ const textareaStyle = reactive({
   color: '#cacece'
 });
 
-onMounted(async () => {
-    await fetchPost();
-
-})
-
-const fetchPost = async () => {
-  try {
-    let response = await api.get(`posts/${route.params.id}`);
-    post.value = response.data.post;
-
+const fetchComments = async () => {
+  try{
     let res = await api.get(`posts/${route.params.id}/comments`);
 
     comments.value = Array.isArray(res.data) ? res.data : [res.data];
 
     comments.value = comments.value.filter(c => c.parent_comment_id === null);
 
+    let magResponse = await api.get(`magazines`)
+    magazines.value = magResponse.data
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 
@@ -101,6 +103,9 @@ const deleteComment = (commentId) => {
 
 };
 
+onMounted( async () => {
+  await fetchComments()
+})
 </script>
 
 <style scoped>
@@ -118,4 +123,68 @@ const deleteComment = (commentId) => {
   margin-top: 0;
 }
 
+.wotitem {
+  border: 2px solid #3d3c3d;
+  margin: 20px auto;
+  padding: 1em;
+  width: 90%;
+  background-color: #3d3c3d;
+  border-color: #4a4a4a;
+  position: relative;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.el-button.btn-primary {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 10px 20px;
+  border-radius: 0;
+}
+
+.el-button.btn-danger {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 10px 20px;
+  border-radius: 0;
+}
+
+.el-button:hover {
+  background-color: #333;
+}
+
+.edit-form-container {
+  background-color: #2a2929;
+  padding: 20px;
+  margin: 20px auto;
+  width: 90%;
+  border: 2px solid #4a4a4a;
+  border-radius: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #1c1c1c;
+  border: 1px solid #373737;
+  color: #cacece;
+  font-size: 1rem;
+}
+
+.btn-secondary {
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.btn-secondary:hover {
+  background-color: #666;
+}
 </style>

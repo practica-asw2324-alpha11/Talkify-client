@@ -1,22 +1,25 @@
 import axios from 'axios'
 
 const VUE_APP_API_URL = "https://talkify.fly.dev/"
-const VUE_APP_API_KEY = "PdDXW9UJMv1vvKCmF4pDndpS"
+const API_KEYS = {
+    '2': 'PdDXW9UJMv1vvKCmF4pDndpS', // Miguel
+    '1': 'byLdmMU5wnobRimdGcfse4pL', // Ivan
+    '3': 'sBhfhbUzkp2sfoewQBokuUY6', // Ferran
+    '4': '7M6G6ajNnr18cKQM4EuxuWcA'  // Sara
+}
 
-// Create an api of axios
 const api = axios.create({
-    baseURL: VUE_APP_API_URL
+  baseURL: VUE_APP_API_URL
 })
 
-// Add a request interceptor
+
 api.interceptors.request.use((config) => {
-    // Do something before request is sent
-    config.headers['x-api-key'] = `${VUE_APP_API_KEY}`
-    config.headers['Accept'] = 'application/json'
-    return config
+  const selectedUser = localStorage.getItem('selectedUser') || '2'; 
+  config.headers['x-api-key'] = API_KEYS[selectedUser]
+  config.headers['Accept'] = 'application/json'
+  return config
 }, (error) => {
-    // Do something with request error
-    return Promise.reject(error)
+  return Promise.reject(error)
 })
 
 export default api

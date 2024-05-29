@@ -24,9 +24,9 @@
         </span>
         <div class="text-container" style="color:#cecece; font-size: 14px;">
           <p>
-            <strong>
-              {{ post.user ? post.user.full_name : 'Anonymous' }}
-            </strong> 
+            <router-link :to="{ name: 'user', params: { id: post.user.id}}">
+              <strong>{{ post.user ? post.user.full_name : 'Anonymous' }}</strong>
+            </router-link>
             {{ timeAgo(post.created_at) }} ago to magazine 
             <strong>
               {{ post.magazine ? post.magazine.title : 'Unknown Magazine' }}
@@ -44,16 +44,21 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue';
+  import { onMounted, ref, inject } from 'vue';
   import { ElButton, ElIcon } from 'element-plus';
+  import { useRouter, useRoute } from 'vue-router';
+
   
-  const props = defineProps(['post']); // Definir las props que espera el componente
+  const props = defineProps(['post']); 
+  const router = useRouter();
+  const api = inject('axios');
+
 
   
   const upvote = async (postId) => {
     try {
       await api.post(`posts/${postId}/upvote`)
-      await fetchPosts(currentSort); 
+      router.go(0);
     } catch (error) {
       console.error(error)
     }
@@ -62,7 +67,7 @@
   const downvote = async (postId) => {
     try {
       await api.post(`posts/${postId}/downvote`)
-      await fetchPosts(currentSort); 
+      router.go(0);
     } catch (error) {
       console.error(error)
     }
@@ -71,7 +76,7 @@
   const boost = async (postId) => {
     try {
       await api.post(`posts/${postId}/boost`)
-      await fetchPosts(currentSort); 
+      router.go(0);
     } catch (error) {
       console.error(error)
     }
@@ -80,7 +85,7 @@
   const unboost = async (postId) => {
     try {
       await api.delete(`posts/${postId}/boost`)
-      await fetchPosts(currentSort); 
+      router.go(0);
     } catch (error) {
       console.error(error)
     }

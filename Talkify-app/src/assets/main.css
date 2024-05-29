@@ -143,3 +143,140 @@ a,
   background-color: #111 !important;
   border-color: #444 !important;
 }
+
+/* Estilos para la barra de navegación */
+.navbar {
+  background-color: #343a40;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: #555;
+}
+
+/* Estilos para el menú */
+.head-nav__menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.head-nav__menu li {
+  margin-right: 10px;
+}
+
+.head-nav__menu li:last-child {
+  margin-right: 0;
+}
+
+.head-nav__menu li a {
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+}
+
+.head-nav__menu li a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.head-nav__menu li a:hover::after {
+  width: 100%;
+}
+
+/* Estilos para los íconos en la barra de navegación */
+.navbar-icons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icons a,
+.navbar-icons button {
+  color: #fff;
+  margin-right: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+
+.navbar-icons a::after,
+.navbar-icons button::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.navbar-icons a:hover::after,
+.navbar-icons button:hover::after {
+  width: 100%;
+}
+
+/* Estilos para la sub-barra de navegación */
+.sub-navbar {
+  background-color: #222;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 90%;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.sub-navbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px;
+  transition: background-color 0.3s ease;
+}
+
+.sub-navbar a,
+.sub-navbar .dropdown-btn {
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+}
+
+.sub-navbar a::after,
+.sub-navbar .dropdown-btn::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.sub-navbar a:hover::after,
+.sub-navbar .dropdown-btn:hover::after {
+  width: 100%;
+}
