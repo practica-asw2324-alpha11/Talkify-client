@@ -77,7 +77,7 @@
 					sort_by: sortBy
 				}
 			})
-			posts.value = response.data
+			posts.value = response.data.posts
 		} catch (error) {
 			console.error(error)
 		}
