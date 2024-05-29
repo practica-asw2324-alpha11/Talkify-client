@@ -1,6 +1,5 @@
 <template>
-    <navbar></navbar>
-  
+
     <div class="profile-header wotitem">
       <div class="background-banner-container" >
         <img :src="user.background" class="background-banner" />
@@ -54,7 +53,6 @@
   import { onMounted, ref, inject, defineProps } from 'vue';
 
   import { useRoute, useRouter } from 'vue-router';
-  import navbar from './navbar.vue';
   import profile_tab from './profile_tab.vue';
 
 

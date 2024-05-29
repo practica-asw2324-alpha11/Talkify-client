@@ -1,6 +1,5 @@
 <template>
     <div>
-      <navbar></navbar>
       <div class="sub-navbar">
         <div style="font-size: 18px; margin-left: 80px;">
           <a href="#" @click.prevent="selectedPostType = 'link'" :class="{ 'active': selectedPostType === 'link' }">Link</a>
@@ -40,7 +39,6 @@
   <script setup>
   import { ref, inject, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import navbar from './navbar.vue'
   import { ElButton } from 'element-plus'
   
   const selectedPostType = ref('link')
