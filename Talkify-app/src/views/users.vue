@@ -21,8 +21,7 @@
   <script setup>
   import { onMounted, ref, inject, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import navbar from './navbar.vue';
-  import profile_tab from './profile_tab.vue';
+  import profile_tab from './Profile/profile_tab.vue';
   
   const route = useRoute();
   const router = useRouter();
