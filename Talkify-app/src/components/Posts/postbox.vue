@@ -1,81 +1,95 @@
 <template>
     <div class="wotitem">
-      <div class="post-header">
-        <div class="vote-el-buttons">
-          <el-button type="primary" @click="upvote(post.id)" class="vote" :style="{ color: post.is_upvoted ? 'green' : '' }">
-            <span>{{ post.upvotes_count }} &nbsp;</span>
-            <el-icon><Top /></el-icon>
-          </el-button>
-          <br>
-          <el-button type="primary" @click="downvote(post.id)" class="vote" :style="{ color: post.is_downvoted ? 'red' : '' }">
-            <span>{{ post.downvotes_count }} &nbsp;</span>
-            <el-icon><Bottom /></el-icon>
-          </el-button>
-        </div>
-      </div>
-      <div class="post-content">
-        <span class="first-part">
-          <h2>
-            <router-link :to="'/post/' + post.id" style="color: white;">{{ post.title }}</router-link>
-            <span v-if="post.link" style="font-size: 14px;">
-              (<a href="#" style="color: white;" @click.prevent="openExternalLink(post.url)">{{ post.url }}</a>)
+      <el-row>
+        <!-- botones upvote/downvote -->
+        <el-col class="post-header" :span="3">
+          <div class="vote-el-buttons">
+            <el-button type="primary" @click="upvote(post.id)" class="vote" :style="{ color: post.is_upvoted ? 'green' : '' }">
+              <span>{{ post.upvotes_count }} &nbsp;</span>
+              <el-icon><Top /></el-icon>
+            </el-button>
+            <br>
+            <el-button type="primary" @click="downvote(post.id)" class="vote" :style="{ color: post.is_downvoted ? 'red' : '' }">
+              <span>{{ post.downvotes_count }} &nbsp;</span>
+              <el-icon><Bottom /></el-icon>
+            </el-button>
+          </div>
+        </el-col>
+        <!-- contenido del post -->
+        <el-col :span="18">
+          <div class="post-content">
+            <span class="first-part">
+              <h2>
+                <router-link :to="'/post/' + post.id" style="color: white;">{{ post.title }}</router-link>
+                <span v-if="post.link" style="font-size: 14px;">
+                  (<a href="#" style="color: white;" @click.prevent="openExternalLink(post.url)">{{ post.url }}</a>)
+                </span>
+              </h2>
             </span>
-          </h2>
-        </span>
-        <div class="text-container" style="color:#cecece; font-size: 14px;">
-          <p>
-            <router-link v-if="post && post.user" :to="{ name: 'user', params: { id: post.user.id }}">
-              <strong>{{ post.user ? post.user.full_name : 'Anonymous' }}</strong>
-            </router-link>
-            {{ timeAgo(post.created_at) }} ago to magazine 
-            <router-link v-if="magazine && magazine.user" :to="{ name: 'magazine', params: {id: post.magazine.id}}">
-              <strong> {{ post.magazine ? post.magazine.title : 'Unknown Magazine' }}</strong>
-            </router-link>
-          </p>
+            <div class="text-container" style="color:#cecece; font-size: 14px;">
+              <p>
+                <router-link v-if="post && post.user" :to="{ name: 'user', params: { id: post.user.id }}">
+                  <strong>{{ post.user ? post.user.full_name : 'Anonymous' }}</strong>
+                </router-link>
+                {{ timeAgo(post.created_at) }} ago to magazine 
+                <router-link v-if="post && post.magazine" :to="{ name: 'magazine', params: {id: post.magazine.id}}">
+                  <strong> {{ post.magazine ? post.magazine.title : 'Unknown Magazine' }}</strong>
+                </router-link>
+              </p>
+            </div>
+            <div class="activity">
+              <router-link :to="'/post/' + post.id">comments ({{ post.comments_count }})  </router-link>
+              <span @click="post.is_boosted ? unboost(post.id) : boost(post.id)">
+                {{ post.is_boosted ? 'boost(1)' : 'boost' }}
+              </span>    
+            </div>
+            <div v-if="focus">
+              <span>{{ post.body }}</span>
+            </div>
+          </div>
+        </el-col>
+        <!-- Botones acción -->
+        <el-col :span="3">
+          <div v-if="focus" class="post-actions">
+            <el-button class="btn-primary btn-rectangular" @click="toggleEditMode">Editar</el-button>
+            <el-button class="btn-danger btn-rectangular" @click="deletePost">Eliminar</el-button>
+          </div>
+        </el-col>
+      </el-row>
+        
+        <!-- Form edit post -->
+      <hr v-if="isEditing" style="margin-top: 20px; border-color: rgba(0, 0, 0, 0.5);" >
+      <el-row v-if="isEditing">
+        <div  class="edit-form-container">
+          <h2>Editar Publicación</h2>
+          <form @submit.prevent="updatePost">
+            <div class="form-group">
+              <label for="title">Title:</label>
+              <input type="text" v-model="formData.title" id="title" class="form-control" required />
+            </div>
+            <div v-if="post.link" class="form-group">
+              <label for="link-url">URL del Enlace:</label>
+              <input type="text" v-model="formData.url" id="link-url" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="thread-body">Contenido del Thread:</label>
+              <textarea v-model="formData.body" id="thread-body" class="form-control" rows="5" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="magazine">Magazine:</label>
+              <select v-model="formData.magazine_id" id="magazine" class="form-control">
+                <option v-for="magazine in magazines" :key="magazine.id" :value="magazine.id">{{ magazine.name }}</option>
+              </select>
+            </div>
+            <el-row>
+              <el-col style="display: flex; justify-content: flex-end" >
+                <el-button type="submit" class="btn btn-secondary btn-rectangular">Guardar Cambios</el-button>
+                <el-button type="button" class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
+              </el-col>
+            </el-row>
+          </form>
         </div>
-        <div class="activity">
-          <router-link :to="'/post/' + post.id">comments ({{ post.comments_count }})  </router-link>
-          <span @click="post.is_boosted ? unboost(post.id) : boost(post.id)">
-            {{ post.is_boosted ? 'boost(1)' : 'boost' }}
-          </span>    
-        </div>
-        <div v-if="focus">
-          <span>{{ post.body }}</span>
-        </div>
-      </div>
-      <div v-if="focus" class="post-actions">
-        <el-button class="btn-primary btn-rectangular" @click="toggleEditMode">Editar</el-button>
-        <el-button class="btn-danger btn-rectangular" @click="deletePost">Eliminar</el-button>
-      </div>
-
-
-    <div v-if="isEditing" class="edit-form-container">
-      <h2>Editar Publicación</h2>
-      <form @submit.prevent="updatePost">
-        <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" v-model="formData.title" id="title" class="form-control" required />
-        </div>
-        <div v-if="post.link" class="form-group">
-          <label for="link-url">URL del Enlace:</label>
-          <input type="text" v-model="formData.url" id="link-url" class="form-control" required />
-        </div>
-        <div class="form-group">
-          <label for="thread-body">Contenido del Thread:</label>
-          <textarea v-model="formData.body" id="thread-body" class="form-control" rows="5" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="magazine">Magazine:</label>
-          <select v-model="formData.magazine_id" id="magazine" class="form-control">
-            <option v-for="magazine in magazines" :key="magazine.id" :value="magazine.id">{{ magazine.name }}</option>
-          </select>
-        </div>
-        <div class="form-group text-right">
-          <el-button type="submit" class="btn btn-secondary btn-rectangular">Guardar Cambios</el-button>
-          <el-button type="button" class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
-        </div>
-      </form>
-    </div>
+      </el-row>
     </div>
   </template>
   
@@ -89,6 +103,8 @@
   const router = useRouter();
   const api = inject('axios');
   const route = useRoute();
+
+  const magazines = ref([])
 
   const focus = ref(false)
 
@@ -205,6 +221,9 @@ const fetchPost = async () => {
     console.log(post.value)
     console.log(post.value.user.id)
 
+    let res = await api.get(`magazines/`);
+    magazines.value = res.data
+
   } catch(error){
     console.error(error)
   }
@@ -226,22 +245,82 @@ onMounted(async () => {
   .wotitem {
     background-color: #333; /* Fondo oscuro */
     color: #fff; /* Texto blanco */
-    display: flex;
     align-items: start;
   }
   
   .vote-el-buttons .el-button {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra los elementos horizontalmente */
-    border-radius: 0;
-    background-color: #111;
-    border-color: #444;
-    
+    align-items: center; 
   }
   
   .icon-container {
     margin: 10px 0; /* Añade un margen en la parte superior e inferior */
   }
+
+  .wotitem {
+  border: 2px solid #3d3c3d;
+  margin: 20px auto;
+  padding: 1em;
+  width: 90%;
+  background-color: #3d3c3d;
+  border-color: #4a4a4a;
+  position: relative;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.el-button.btn-primary {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 10px 20px;
+  border-radius: 0;
+}
+
+.el-button.btn-danger {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 10px 20px;
+  border-radius: 0;
+}
+
+.el-button:hover {
+  background-color: #333;
+}
+
+.edit-form-container {
+  background-color: #2a2929;
+  padding: 20px;
+  margin: 20px auto;
+  width: 90%;
+  border: 2px solid #4a4a4a;
+  border-radius: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #1c1c1c;
+  border: 1px solid #373737;
+  color: #cacece;
+  font-size: 1rem;
+}
+
+.btn-secondary {
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.btn-secondary:hover {
+  background-color: #666;
+}
   </style>
   

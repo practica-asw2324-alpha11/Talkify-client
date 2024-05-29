@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <div class="sub-navbar wotitem">
-      <div style="font-size: 18px; margin-left: 80px;">
+    <el-row class="sub-navbar wotitem">
+      <el-col :span="10" style="display:flex;">
         <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('threads')">Most threads</el-button>
         <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('comments')">Most commented</el-button>
         <el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchMagazines('subscribers')">Most subscribers</el-button>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
     <div class="wotbody">
       <div class="wotitem">
         <table class="magazine-table">
