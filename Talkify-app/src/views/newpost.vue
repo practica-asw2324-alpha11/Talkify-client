@@ -5,7 +5,7 @@
         <div style="font-size: 18px; margin-left: 80px;">
           <a href="#" @click.prevent="selectedPostType = 'link'" :class="{ 'active': selectedPostType === 'link' }">Link</a>
           <a href="#" @click.prevent="selectedPostType = 'thread'" :class="{ 'active': selectedPostType === 'thread' }">Thread</a>
-          <a href="#" @click.prevent="selectedPostType = 'magazine'" :class="{ 'active': selectedPostType === 'magazine' }">Magazine</a>
+          <a href="#" @click.prevent="goToNewMagazine" :class="{ 'active': selectedPostType === 'magazine' }">Magazine</a>
         </div>
       </div>
       <div class="wotitem">
@@ -80,6 +80,10 @@
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const goToNewMagazine = () => {
+    router.push('/newmagazine')
   }
   </script>
   
