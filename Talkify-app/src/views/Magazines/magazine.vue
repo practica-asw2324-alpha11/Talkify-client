@@ -36,8 +36,7 @@
 <script setup>
 	import { onMounted, ref, inject } from 'vue'
 	import { useRoute, useRouter } from 'vue-router'
-	import postbox from './postbox.vue'
-	import navbar from './navbar.vue'
+	import postbox from '../../components/Posts/postbox.vue'
 	import { ElButton } from 'element-plus'
 
 	const magazine = ref({})

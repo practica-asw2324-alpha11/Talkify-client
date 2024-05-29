@@ -35,9 +35,8 @@
 </template>
 
 <script setup>
-	import { ref, inject, onMounted } from 'vue'
+	import { ref, inject } from 'vue'
 	import { useRouter, useRoute } from 'vue-router'
-	import navbar from './navbar.vue'
 	import { ElButton } from 'element-plus'
 
 	const formData = ref({ name: '', title: '', description: '', rules: '' })
