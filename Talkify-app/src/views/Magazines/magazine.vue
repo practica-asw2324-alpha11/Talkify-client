@@ -1,34 +1,37 @@
 <template>
 	<div>
-		<div id="magazine" class=" infomagazine wotitem">
+		<div id="magazine" class="wotitem">
 			<h2>{{magazine.name}}</h2>
 			<strong><p>@{{magazine.title}}@talkify</p></strong>
-			<strong><p>Description:</p></strong>
-			<p>{{magazine.description}}</p>
-			<strong><p>Rules:</p></strong>
-			<p>{{magazine.rules}}</p>
+			<div style="display: flex;">
+				<strong><p>Description : &nbsp;</p></strong>
+				<p>{{magazine.description}}</p>
+			</div>
+			<div style="display: flex;">
+				<strong><p>Rules: &nbsp;</p></strong>
+				<p>{{magazine.rules}}</p>
+			</div>
+			<br>
 			<div class="user_actions_mag">
-        <el-button v-if="magazine.isSubscribed" @click.prevent="unsubscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Unsubscribe</el-button>
-        <el-button v-else @click.prevent="subscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Subscribe</el-button>
-      </div>
+        		<el-button v-if="magazine.isSubscribed" @click.prevent="unsubscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Unsubscribe</el-button>
+        		<el-button v-else @click.prevent="subscribe(magazine.id)" class="btn btn-primary btn-rectangular-mag">Subscribe</el-button>
+      		</div>
 		</div>
-		<div class="infomagazine wotitem">
+		<div class="wotitem">
 			<p><strong>Created: </strong>{{calculateDate(magazine.created_at)}}</p>
 			<p><strong>Subscribers: </strong>{{magazine.subscribers}}</p>
 			<p><strong>Threads: </strong>{{magazine.threads}}</p>
 			<p><strong>Comments: </strong>{{magazine.comments}}</p>
 		</div>
-		<div class="sub-navbar wotitem">
-			<div style="font-size: 18px; margin-left: 80px;">
+		<el-row class="sub-navbar wotitem">
+			<el-col :span="10" style="display:flex;">
     		<el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('top')">Top</el-button>
     		<el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('newest')">Newest</el-button>
     		<el-button class="btn btn-secondary btn-rectangular" @click.prevent="fetchPosts('commented')">Commented</el-button>
-  		</div>
-		</div>
+  		</el-col>
+		</el-row>
 		<div>
-			<div v-for="post in posts" :key="post.id">
-      	<postbox :post="post" />
-    	</div>
+			<postbox v-for="post in posts" :key="post.id" :post="post" />
 		</div> 
 	</div>
 </template>

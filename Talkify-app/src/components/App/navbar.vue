@@ -13,12 +13,12 @@
               <li><router-link to="/magazines">Magazines</router-link></li>
             </menu>
             <div class="navbar-icons">
-                <el-input v-model="searchQuery" placeholder="Buscar..." :prefix-icon="searchIcon" @keyup.enter="handleSearch" :class="['dark-mode']" style="margin-right: 60px;"> </el-input>              
-                <el-select v-model="selectedOption" placeholder="New" suffix-icon= "Plus" @change="handleNewPost" :class="['dark-mode']"style="margin-right: 60px;">
+              <el-input v-model="searchQuery" placeholder="Buscar..." :prefix-icon="searchIcon" @keyup.enter="handleSearch" style="margin-right: 60px;"> </el-input>              
+              <el-select v-model="selectedOption" placeholder="New" suffix-icon= "Plus" @change="handleNewPost" style="margin-right: 60px;">
                 <el-option value="link">Add new link</el-option>
                 <el-option value="thread">Add new thread</el-option>
                 <el-option value="magazine">Add new magazine</el-option>
-            </el-select>
+              </el-select>
               <div class="dropdown">
                 <el-select v-model="selectedUser" placeholder="User" suffix-icon="User" :class="['dark-mode']" @change="handleUserChange" style="margin-right: 60px;">
                     <el-option value='2'>Miguel Goñi Fusté</el-option>
@@ -52,7 +52,6 @@
   <script setup>
   import { ref, inject, onMounted } from 'vue'
   import { useRouter } from 'vue-router';
-  import { ElSelect, ElOption, ElIcon, ElInput} from 'element-plus';
   import { Search } from '@element-plus/icons-vue'
 
 
@@ -65,6 +64,7 @@
   const selectedUser = ref('2');
 
   const api = inject('axios')
+
 
   onMounted(() => {
   const storedUser = localStorage.getItem('selectedUser');

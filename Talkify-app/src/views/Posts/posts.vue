@@ -20,9 +20,7 @@
       </el-row>
     </div>
       
-    <div v-for="post in posts" :key="post.id">
-      <postbox :post="post"/>
-    </div>
+    <postbox v-for="post in posts" :key="post.id" :post="post"/>
   </div>
 </template>
 
