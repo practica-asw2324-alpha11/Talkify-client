@@ -3,7 +3,7 @@
     <div :id="`comment-${comment.id}`"  class="wotitem">
         <el-row justify="space-between">
             <el-col :span="12">
-                <router-link :to="`/user/${comment.user_id}`">{{ comment.user.full_name }}</router-link>,
+                <router-link :to="`/user/${comment.user.id}`">{{ comment.user.full_name }}</router-link>,
                 {{ formatDate(new Date(comment.created_at), comment.created_at) }} ago
             </el-col>
             <el-col :span="12" style="display: flex; justify-content: flex-end">
@@ -23,7 +23,7 @@
             </el-col>
         </el-row>
         <el-row>
-          {{ comment.body }}  
+          {{ comment.body }}
         </el-row>
         <el-row>
             <a style="margin-bottom: 10px; margin-top: 10px;" @click="onReply">reply</a>
@@ -64,12 +64,12 @@
     <post_comment style="padding-left: 20px; " v-for="reply in comment.replies" :key="reply.id" :comment="reply"></post_comment>
 
 </div>
-    
+
 
 </template>
 
 <script setup>
-import { onMounted, ref, inject, reactive, emit } from 'vue'
+import { onMounted, ref, inject, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatDistanceToNow } from 'date-fns';
 
@@ -79,6 +79,8 @@ const props = defineProps({
 
 const api = inject('axios')
 const route = useRoute()
+const emit = defineEmits(['delete-comment'])
+
 const comment = ref(props.comment)
 const reply_body = ref('')
 const reply_to = ref('')
@@ -109,7 +111,7 @@ const upvote = async (commentId) => {
       console.error(error)
     }
 }
-  
+
 const downvote = async (commentId) => {
     try {
         let updated_comm = await api.post(`posts/${route.params.post_id}/comments/${commentId}/downvote`)
@@ -128,9 +130,9 @@ const createReply = async (commentId) => {
     let res = await api.post(`posts/${route.params.id}/comments`, data)
     comment.value.replies.push(res.data)
   } catch (error){
-    console.log(error)
+    console.error(error);
   }
- 
+
 }
 
 const editComment = async (commentId) => {
@@ -142,9 +144,9 @@ const editComment = async (commentId) => {
     edit.value = ''
 
   } catch (error){
-    console.log(error)
+    console.error(error);
   }
- 
+
 }
 
 const onReply = () => {
@@ -153,18 +155,18 @@ const onReply = () => {
 
 const onDelete = async () => {
   try{
-    let res = api.delete(`posts/${route.params.id}/comments/${comment.value.id}`)
-    console.log(res)
-    if(res.statusCode == 200){
+    let res = await api.delete(`posts/${route.params.id}/comments/${comment.value.id}`)
+
+    if(res.data.status == 200){
       if(comment.value.parent_comment_id === null){
-        emit('delete-comment', comment)
+        emit('delete-comment', comment.value.id)
       }
       else{
         window.location.reload();
       }
     }
   } catch(error){
-    console.log(error)
+    console.error(error);
   }
 }
 
@@ -178,7 +180,7 @@ const onDelete = async () => {
     border-radius: 0;
     background-color: #111;
     border-color: #444;
-    
+
   }
 
   .wotitem {

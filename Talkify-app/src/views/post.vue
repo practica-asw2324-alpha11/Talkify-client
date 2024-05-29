@@ -1,7 +1,7 @@
 <template>
 
     <postbox id="post" :post="post" />
-    
+
     <div class="wotitem sub-navbar">
       <a @click="sortComments('top')" class="nav-link">Top</a>
       <a @click="sortComments('newest')" class="nav-link">Newest</a>
@@ -28,7 +28,7 @@
 import { onMounted, ref, inject, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import PostComment from './post_comment.vue'
-import postbox from './postbox.vue'; 
+import postbox from './postbox.vue';
 
 
 const post = ref({})
@@ -45,15 +45,15 @@ const textareaStyle = reactive({
 });
 
 onMounted(async () => {
-    await fetchPost(); 
-    
+    await fetchPost();
+
 })
 
 const fetchPost = async () => {
   try {
     let response = await api.get(`posts/${route.params.id}`);
     post.value = response.data.post;
-    
+
     let res = await api.get(`posts/${route.params.id}/comments`);
 
     comments.value = Array.isArray(res.data) ? res.data : [res.data];
@@ -73,9 +73,9 @@ const createComment = async () => {
     let res = await api.post(`posts/${route.params.id}/comments`, data)
     comments.value.push(res.data)
   } catch (error){
-    console.log(error)
+    console.error(error);
   }
- 
+
 }
 
 const sortComments = async (param) => {
@@ -94,11 +94,11 @@ const sortComments = async (param) => {
 }
 
 const deleteComment = (commentId) => {
-  console.log("delte")
-  let index = comments.value.findIndex(comment => comment.id === commentId);
+  let index = comments.value.findIndex(c => c.id === commentId);
   if (index !== -1) {
     comments.value.splice(index, 1);
   }
+
 };
 
 </script>
@@ -115,7 +115,7 @@ const deleteComment = (commentId) => {
 
 .single-comment{
   margin-bottom: 0;
-  margin-top: 0; 
+  margin-top: 0;
 }
 
 </style>
