@@ -9,3 +9,4 @@ Integrantes:
 -  Iván López Buira
 
 Taiga: https://tree.taiga.io/project/sarachillon-asw/timeline
+App: https://talkify-app.fly.dev/
