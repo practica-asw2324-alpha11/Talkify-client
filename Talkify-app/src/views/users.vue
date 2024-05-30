@@ -15,7 +15,7 @@
       </div>
     </div>
   
-    <profile_tab v-if="!isEditing" :userId="route.params.id"></profile_tab>
+    <profile_tab v-if="!isEditing" :userId="route.params.id" :num_activity="num_activity"></profile_tab>
   </template>
   
   <script setup>
@@ -27,6 +27,9 @@
   const router = useRouter();
   const api = inject('axios');
   
+
+  const num_activity = ref({});
+
   const isEditing = false;
   const user = ref({});
   const routeUserId = route.params.id;
@@ -45,6 +48,10 @@
     }
     const response = await api.get(`users/${routeUserId}`);
     user.value = response.data;
+    num_activity.value = { 
+        num_threads: user.value.posts_count,
+        num_comments: user.value.comments_count
+      }
     console.log("USER CHARGED")
     console.log(user.value);
     formData.value = { ...user.value, avatar: null, background: null }; 
