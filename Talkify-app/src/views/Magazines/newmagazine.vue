@@ -1,25 +1,31 @@
 <template>
+	<el-row justify="center" style="margin-top: 10px; margin-bottom: 10px">
+		<el-col :span="8">
+			<el-alert v-if="alert" :title="alertText" :type="alertStyle" effect="dark" show-icon @close="alert=false"/>
+		</el-col>
+	</el-row>
+
 	<div>
 		<div class="sub-navbar">
-			<div style="font-size: 18px; margin-left: 80px;">
-        <a href="#" @click.prevent="goToNewPost('link')" :class="{ 'active': selectedPostType === 'link' }">Link</a>
-        <a href="#" @click.prevent="goToNewPost('thread')" :class="{ 'active': selectedPostType === 'thread' }">Thread</a>
-        <a href="#">Magazine</a>
-      </div>
-    </div>
+			<div style="font-size: 18px; display: flex">
+        		<el-button href="#" @click.prevent="goToNewPost('link')" :class="{ 'active': selectedPostType === 'link' }">Link</el-button>
+        		<el-button href="#" @click.prevent="goToNewPost('thread')" :class="{ 'active': selectedPostType === 'thread' }">Thread</el-button>
+        		<el-button href="#">Magazine</el-button>
+      		</div>
+    	</div>
 		<div class="wotitem">
 			<h2>Crear Nueva Magazine</h2>
 			<form @submit.prevent="createMagazine">
 				<div class="form-group">
-					<label for="name">Nombre:</label>
+					<label for="name">Nombre: <span style="color: red;">*</span></label>
 					<input type="text" v-model="formData.name" id="name" class="form-control" required/>
 				</div>
 				<div class="form-group">
-					<label for="title">Título:</label>
+					<label for="title">Título: <span style="color: red;">*</span></label>
 					<input type="text" v-model="formData.title" id="title" class="form-control" required/>
 				</div>
 				<div class="form-group">
-					<label for="description">Descripción:</label>
+					<label for="description">Descripción: </label>
 					<textarea v-model="formData.description" id="description" class="form-control" rows="3"></textarea>
 				</div>
 				<div class="form-group">
@@ -27,7 +33,7 @@
 					<textarea v-model="formData.rules" id="rules" class="form-control" rows="3"></textarea>
 				</div>
 				<div class="form-group text-right">
-					<el-button type="submit" class="btn btn-secondary btn-rectangular" @click="createMagazine">Crear Magazine</el-button>
+					<el-button class="btn btn-secondary btn-rectangular" @click="createMagazine">Crear Magazine</el-button>
 				</div>
 			</form>
 		</div>
@@ -44,6 +50,17 @@
 	const router = useRouter()
 	const route = useRoute()
 
+	const alertText = ref('')
+	const alertStyle = ref('')
+	const alert = ref(false)
+
+
+	const showAlert = (text, style) => {
+		alertText.value = text;
+		alertStyle.value = style;
+		alert.value = true;
+	}
+
 	const createMagazine = async () => {
 		try {
 			let payload = {
@@ -55,6 +72,7 @@
 			await api.post('magazines', payload)
 			router.push('/magazines')
 		} catch (error) {
+			showAlert("No se ha podido crear la Magazine, hay campos vacíos", "error")
 			console.error(error)
 		}
 	}

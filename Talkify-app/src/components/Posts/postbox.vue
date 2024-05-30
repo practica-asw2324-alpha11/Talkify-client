@@ -40,7 +40,7 @@
             <div class="activity">
               <router-link :to="'/post/' + post.id">comments ({{ post.comments_count }})  </router-link>
               <span @click="post.is_boosted ? unboost(post.id) : boost(post.id)">
-                {{ post.is_boosted ? 'boost(1)' : 'boost' }}
+                {{ post.is_boosted ? 'unboost' : 'boost' }}
               </span>    
             </div>
             <div v-if="focus">
@@ -103,6 +103,7 @@ import { onMounted, ref, inject, defineEmits } from 'vue';
   const router = useRouter();
   const api = inject('axios');
   const route = useRoute();
+  const emit = defineEmits();
 
   const magazines = ref([])
 
@@ -149,6 +150,10 @@ import { onMounted, ref, inject, defineEmits } from 'vue';
     try {
       let response = await api.delete(`posts/${postId}/boost`)
       post.value = response.data.post;
+
+      if(route.path === '/profile') {
+        emit('unboost-post', post.value)
+      }
 
     } catch (error) {
       console.error(error)
