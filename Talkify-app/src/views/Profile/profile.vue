@@ -14,7 +14,7 @@
         <p class="user-email">{{ user.email }}</p>
         <p class="user-description">{{ user.description }}</p>    
       </div>
-      <el-button type="button" class="btn btn-primary btn-rectangular" @click="toggleEditMode">Edit Profile</el-button>
+      <el-button class="btn btn-primary btn-rectangular" @click="toggleEditMode">Edit Profile</el-button>
 
     </div>
   
@@ -41,8 +41,8 @@
           <input type="file" @change="handleBackgroundChange" id="background" accept="image/jpeg,image/gif,image/png" />
         </div>
         <div class="form-group text-left">
-          <el-button type="submit" class="btn btn-primary btn-rectangular" @click="updateProfile">Guardar</el-button>
-          <el-button type="button" class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
+          <el-button class="btn btn-primary btn-rectangular" @click="updateProfile">Guardar</el-button>
+          <el-button class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
         </div>
       </form>
     </div>
@@ -62,7 +62,7 @@
   const userId1 = ref(localStorage.getItem('selectedUser'));
 
   
-  const isEditing = ref(route.query.isEditing === 'true');
+  const isEditing = ref(false);
   const user = ref({});
   const formData = ref({
     email: '',
@@ -90,11 +90,6 @@
   
   const toggleEditMode = () => {
     isEditing.value = !isEditing.value;
-    if (isEditing.value) {
-      router.push({ name: 'editprofile', query: { isEditing: 'true' } });
-    } else {
-      router.push({ name: 'profile' });
-    }
   };
   
   const handleAvatarChange = (event) => {
