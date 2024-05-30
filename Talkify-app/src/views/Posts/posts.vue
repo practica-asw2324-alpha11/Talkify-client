@@ -20,7 +20,7 @@
       </el-row>
     </div>
       
-    <postbox v-for="post in posts" :key="post.id" :post="post"/>
+    <postbox v-for="post in posts" :key="post.id" :post="post" />
   </div>
 </template>
 
@@ -64,6 +64,10 @@ const fetchPosts = async (sortBy, filter) => {
     console.error(error);
   }
 }
+
+
+
+
 
 let currentSort = 'newest';
 
