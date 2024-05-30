@@ -114,7 +114,7 @@ const handleCommand = (command) => {
 
 .el-select-dropdown__item.selected.hover,
 .el-select-dropdown__item.selected:hover {
-  background-color: #6a9c7a;
+  background-color: rgb(182, 127, 225);
   color: #000;
 }
 

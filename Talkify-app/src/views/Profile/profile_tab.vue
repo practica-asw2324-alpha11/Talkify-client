@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="sub-navbar wotitem">
-      <div>
-        <button @click="setView('threads')" :class="{ active: currentView === 'threads' }">Threads</button>
-        <button @click="setView('comments')" :class="{ active: currentView === 'comments' }">Comments</button>
-        <button @click="setView('boosts')" :class="{ active: currentView === 'boosts' }" v-if="localStorageUserIdMatchesRoute">Boosts</button>
+      <div style="display: flex;">
+        <el-button @click="setView('threads')" :class="{ active: currentView === 'threads' }">Threads ( {{ num_activity.num_threads }} ) </el-button>
+        <el-button @click="setView('comments')" :class="{ active: currentView === 'comments' }">Comments ( {{ num_activity.num_comments }} ) </el-button>
+        <el-button @click="setView('boosts')" :class="{ active: currentView === 'boosts' }" v-if="localStorageUserIdMatchesRoute">Boosts ( {{ num_activity.num_boosts }} ) </el-button>
       </div>
     </div>
 
     <div class="content-container">
       <div v-if="currentView === 'threads'">
         <div class="sub-navbar wotitem">
-          <button @click="setSort('top')">Top</button>
-          <button @click="setSort('newest')">Newest</button>
-          <button @click="setSort('commented')">Commented</button>
+          <el-button @click="setSort('top')">Top</el-button>
+          <el-button @click="setSort('newest')">Newest</el-button>
+          <el-button @click="setSort('commented')">Commented</el-button>
         </div>
         <div id="posts">
           <div v-for="post in posts" :key="post.id">
@@ -24,9 +24,9 @@
 
       <div v-if="currentView === 'comments'">
         <div class="sub-navbar wotitem">
-          <button @click="setSort('top')">Top</button>
-          <button @click="setSort('newest')">Newest</button>
-          <button @click="setSort('oldest')">Oldest</button>
+          <el-button @click="setSort('top')">Top</el-button>
+          <el-button @click="setSort('newest')">Newest</el-button>
+          <el-button @click="setSort('oldest')">Oldest</el-button>
         </div>
         <br>
         <div id="comments">
@@ -36,7 +36,7 @@
 
       <div v-if="currentView === 'boosts'">
         <div v-for="post in boostedPosts" :key="post.id">
-          <postbox :post="post" />
+          <postbox @unboost-post="onUnboostPost" :post="post" />
         </div> 
       </div>
     </div>
@@ -66,6 +66,10 @@ const props = defineProps({
   userId: {
     type: String, 
     required: true 
+  },
+  num_activity: {
+    type: Object,
+    required: true
   }
 });
 
@@ -107,6 +111,11 @@ const fetchData = async () => {
   }
 };
 
+const onUnboostPost = async (postU) => {
+  console.log(postU)
+  boostedPosts.value = boostedPosts.value.filter(boostedPost => boostedPost.id !== postU.id);
+}
+
 onMounted(async () => {
   await fetchData();
 })
@@ -115,16 +124,6 @@ onMounted(async () => {
 
   
   <style scoped>
-  .sub-navbar {
-    background-color: #222;
-    padding: 5px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 90%;
-    margin: 0 auto;
-    border-radius: 5px;
-  }
   
   .sub-navbar button {
     color: #fff;
@@ -136,14 +135,6 @@ onMounted(async () => {
     cursor: pointer;
   }
   
-  .sub-navbar button:hover {
-    background-color: #555;
-  }
-  
-  .sub-navbar button.active {
-    background-color: #007bff;
-    color: #fff;
-  }
   
   .content-container {
     background-color: #333;

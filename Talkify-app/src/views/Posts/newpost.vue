@@ -1,21 +1,28 @@
 <template>
+
+  <el-row justify="center" style="margin-top: 10px; margin-bottom: 10px">
+		<el-col :span="8">
+			<el-alert v-if="alert" :title="alertText" :type="alertStyle" effect="dark" show-icon @close="alert=false"/>
+		</el-col>
+	</el-row>
+
     <div>
       <div class="sub-navbar">
-        <div style="font-size: 18px; margin-left: 80px;">
-          <a href="#" @click.prevent="selectedPostType = 'link'" :class="{ 'active': selectedPostType === 'link' }">Link</a>
-          <a href="#" @click.prevent="selectedPostType = 'thread'" :class="{ 'active': selectedPostType === 'thread' }">Thread</a>
-          <a href="#" @click.prevent="goToNewMagazine" :class="{ 'active': selectedPostType === 'magazine' }">Magazine</a>
+        <div style="font-size: 18px; display: flex;">
+          <el-button href="#" @click.prevent="selectedPostType = 'link'" :class="{ 'active': selectedPostType === 'link' }">Link</el-button>
+          <el-button href="#" @click.prevent="selectedPostType = 'thread'" :class="{ 'active': selectedPostType === 'thread' }">Thread</el-button>
+          <el-button href="#" @click.prevent="goToNewMagazine" :class="{ 'active': selectedPostType === 'magazine' }">Magazine</el-button>
         </div>
       </div>
       <div class="wotitem">
         <h2>Crear Nueva Publicación</h2>
         <form @submit.prevent="createPost">
           <div class="form-group">
-            <label for="title">Título:</label>
+            <label for="title">Título: <span style="color: red;">*</span></label>
             <input type="text" v-model="formData.title" id="title" class="form-control" required />
           </div>
           <div class="form-group" v-if="selectedPostType === 'link'">
-            <label for="link-url">URL del Enlace:</label>
+            <label for="link-url">URL del Enlace: <span style="color: red;">*</span></label>
             <input type="text" v-model="formData.url" id="link-url" class="form-control" required />
           </div>
           <div class="form-group">
@@ -23,7 +30,7 @@
             <textarea v-model="formData.body" id="thread-body" class="form-control" rows="5" required></textarea>
           </div>
           <div class="form-group">
-            <label for="magazine">Magazine:</label>
+            <label for="magazine">Magazine: <span style="color: red;">*</span></label>
             <select v-model="formData.magazine_id" id="magazine" class="form-control">
               <option v-for="magazine in magazines" :key="magazine.id" :value="magazine.id">{{ magazine.name }}</option>
             </select>
@@ -48,6 +55,17 @@
   const router = useRouter()
   const route = useRoute()
   
+  const alertText = ref('')
+	const alertStyle = ref('')
+	const alert = ref(false)
+
+
+	const showAlert = (text, style) => {
+		alertText.value = text;
+		alertStyle.value = style;
+		alert.value = true;
+	}
+
   onMounted(() => {
     const type = route.params.type
     if (type) {
@@ -76,6 +94,7 @@
       await api.post(`posts`, payload)
       router.push("/")
     } catch (error) {
+      showAlert("No se ha podido crear la Publicación, hay campos vacíos", "error")
       console.error(error)
     }
   }

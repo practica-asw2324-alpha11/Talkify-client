@@ -34,23 +34,23 @@
         </div>
         <div class="form-group">
           <label for="avatar">Avatar:</label>
-          <input type="file" @change="handleAvatarChange" id="avatar" accept="image/*" />
+          <el-input :input-style="inputStyle" type="file" @change="handleAvatarChange" id="avatar" accept="image/*" />
         </div>
         <div class="form-group">
           <label for="background">Imagen de fondo:</label>
-          <input type="file" @change="handleBackgroundChange" id="background" accept="image/jpeg,image/gif,image/png" />
+          <el-input :input-style="inputStyle" type="file" @change="handleBackgroundChange" id="background" accept="image/jpeg,image/gif,image/png" />
         </div>
-        <div class="form-group text-left">
+        <div class="form-group text-left" style="display: flex;">
           <el-button class="btn btn-primary btn-rectangular" @click="updateProfile">Guardar</el-button>
           <el-button class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
         </div>
       </form>
     </div>
-    <profile_tab v-if="!isEditing" :userId="userId1"></profile_tab>
+    <profile_tab v-if="!isEditing" :userId="userId1" :num_activity="num_activity"</profile_tab>
   </template>
   
   <script setup>
-  import { onMounted, ref, inject, defineProps } from 'vue';
+  import { onMounted, ref, inject, defineProps, reactive } from 'vue';
 
   import { useRoute, useRouter } from 'vue-router';
   import profile_tab from './profile_tab.vue';
@@ -64,12 +64,20 @@
   
   const isEditing = ref(false);
   const user = ref({});
+  const num_activity = ref({});
+
   const formData = ref({
     email: '',
     full_name: '',
     description: '',
     avatar: null,
     background: null
+  });
+
+  const inputStyle = reactive({
+    backgroundColor: '#555',
+    borderColor: '#555',
+    color: 'white',
   });
   
   const fetchUser = async () => {
@@ -80,6 +88,12 @@
       }
       const response = await api.get(`users/${userId}`);
       user.value = response.data;
+      num_activity.value = { 
+        num_boosts: user.value.boosts_count,
+        num_threads: user.value.posts_count,
+        num_comments: user.value.comments_count
+      }
+      console.log(num_activity.value)
       console.log("USER CHARGED")
       console.log(user.value);
       formData.value = { ...user.value, avatar: null, background: null }; 
@@ -177,7 +191,6 @@ const isValidFileType = (file) => {
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
-    height: 700px;
   }
   
 
