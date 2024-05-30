@@ -94,7 +94,7 @@
   </template>
   
   <script setup>
-  import { onMounted, ref, inject } from 'vue';
+import { onMounted, ref, inject, defineEmits } from 'vue';
   import { ElButton, ElIcon } from 'element-plus';
   import { useRouter, useRoute } from 'vue-router';
   
@@ -119,8 +119,8 @@
   
   const upvote = async (postId) => {
     try {
-      await api.post(`posts/${postId}/upvote`)
-      router.go(0);
+      let response = await api.post(`posts/${postId}/upvote`)
+      post.value = response.data.post;
     } catch (error) {
       console.error(error)
     }
@@ -128,8 +128,8 @@
   
   const downvote = async (postId) => {
     try {
-      await api.post(`posts/${postId}/downvote`)
-      router.go(0);
+      let response = await api.post(`posts/${postId}/downvote`)
+      post.value = response.data.post;
     } catch (error) {
       console.error(error)
     }
@@ -137,8 +137,9 @@
   
   const boost = async (postId) => {
     try {
-      await api.post(`posts/${postId}/boost`)
-      router.go(0);
+      let response = await api.post(`posts/${postId}/boost`)
+      post.value = response.data.post;
+
     } catch (error) {
       console.error(error)
     }
@@ -146,8 +147,9 @@
   
   const unboost = async (postId) => {
     try {
-      await api.delete(`posts/${postId}/boost`)
-      router.go(0);
+      let response = await api.delete(`posts/${postId}/boost`)
+      post.value = response.data.post;
+
     } catch (error) {
       console.error(error)
     }
@@ -188,6 +190,10 @@
     }
   }
 }
+
+
+
+
 
 const updatePost = async () => {
   try {
