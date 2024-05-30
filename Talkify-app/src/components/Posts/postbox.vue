@@ -51,8 +51,8 @@
         <!-- Botones acción -->
         <el-col :span="3">
           <div v-if="focus" class="post-actions">
-            <el-button class="btn-primary btn-rectangular" @click="toggleEditMode">Editar</el-button>
-            <el-button class="btn-danger btn-rectangular" @click="deletePost">Eliminar</el-button>
+            <el-button v-if="isOwner" class="btn-primary btn-rectangular" @click="toggleEditMode">Editar</el-button>
+            <el-button v-if="isOwner" class="btn-danger btn-rectangular" @click="deletePost">Eliminar</el-button>
           </div>
         </el-col>
       </el-row>
@@ -83,7 +83,7 @@
             </div>
             <el-row>
               <el-col style="display: flex; justify-content: flex-end" >
-                <el-button type="submit" class="btn btn-secondary btn-rectangular">Guardar Cambios</el-button>
+                <el-button type="submit" class="btn btn-secondary btn-rectangular" @click="updatePost">Guardar Cambios</el-button>
                 <el-button type="button" class="btn btn-secondary btn-rectangular" @click="toggleEditMode">Cancelar</el-button>
               </el-col>
             </el-row>
@@ -94,7 +94,7 @@
   </template>
   
   <script setup>
-import { onMounted, ref, inject, defineEmits } from 'vue';
+import { onMounted, ref, inject, defineEmits, computed } from 'vue';
   import { ElButton, ElIcon } from 'element-plus';
   import { useRouter, useRoute } from 'vue-router';
   
@@ -117,6 +117,18 @@ import { onMounted, ref, inject, defineEmits } from 'vue';
   })
 
   const post = ref({})
+
+
+
+const isOwner = computed(() => {
+  const localStorageUserId = localStorage.getItem('selectedUser');
+  const postUser = post.value ? post.value.user : null;
+  const userIdFromPost = postUser ? String(postUser.id) : null;
+  console.log(localStorageUserId)
+  console.log(userIdFromPost)
+  return localStorageUserId === userIdFromPost;
+});
+
   
   const upvote = async (postId) => {
     try {
@@ -191,7 +203,7 @@ import { onMounted, ref, inject, defineEmits } from 'vue';
       title: post.value.title,
       url: post.value.link ? post.value.url : '',
       body: !post.value.link ? post.value.body : '',
-      magazine_id: post.value.magazine_id || null,
+      magazine_id: post.value.magazine ? post.value.magazine.id : null,
     }
   }
 }
@@ -205,12 +217,13 @@ const updatePost = async () => {
     let payload = {
       title: formData.value.title,
       url: post.value.link ? formData.value.url : null,
-      body: !post.value.link ? formData.value.body : null,
+      body: formData.value.body,
       magazine_id: formData.value.magazine_id,
     }
     await api.put(`posts/${route.params.id}`, payload)
     await fetchPost()
     isEditing.value = false
+    focus.value = true
   } catch (error) {
     console.error(error)
   }
