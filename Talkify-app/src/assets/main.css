@@ -1,0 +1,282 @@
+@import './base.css';
+
+#app {
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: rgb(182, 127, 225);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(279, 100%, 40%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sub-navbar {
+  display: flex;
+  padding: 1rem;
+  background-color: #222 !important;
+  width: 100%;
+  height: auto;
+}
+
+.navbar-icons {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #444;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.wotitem {
+  border: 2px solid #3d3c3d;
+  margin: 20px auto;
+  padding: 1em;
+  width: 90%;
+  background-color: #3d3c3d;
+  border-color: #4a4a4a;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-content {
+  flex: 1;
+  align-items: center;
+  margin-left: 50px;
+  color: #fff;
+  margin-left: 50px;
+
+}
+
+.vote-buttons {
+  margin-right: 10px;
+}
+
+.vote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1c1c1c;
+  border: 0;
+  color: #b6b6b6;
+  cursor: pointer;
+  font-weight: 700;
+  height: 1.2rem;
+  margin: 0;
+  padding: 0;
+  width: 4rem;
+}
+
+.upvoted {
+  color: green;
+}
+
+.downvoted {
+  color: red;
+}
+
+.first-part h2 a {
+  color: white;
+
+}
+
+.first-part span {
+  font-size: 14px;
+  color: white;
+}
+
+.el-button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* Centra los elementos horizontalmente */
+  border-radius: 0 !important;
+  background-color: #111 !important;
+  border-color: #444 !important;
+}
+
+.el-button:hover {
+  color: rgb(182, 127, 225) !important;
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+  background-color: #343a40;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: #555;
+}
+
+/* Estilos para el menú */
+.head-nav__menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.head-nav__menu li {
+  margin-right: 10px;
+}
+
+.head-nav__menu li:last-child {
+  margin-right: 0;
+}
+
+.head-nav__menu li a {
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+}
+
+.head-nav__menu li a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.head-nav__menu li a:hover::after {
+  width: 100%;
+}
+
+/* Estilos para los íconos en la barra de navegación */
+.navbar-icons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icons a,
+.navbar-icons button {
+  color: #fff;
+  margin-right: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+
+.navbar-icons a::after,
+.navbar-icons button::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.navbar-icons a:hover::after,
+.navbar-icons button:hover::after {
+  width: 100%;
+}
+
+/* Estilos para la sub-barra de navegación */
+.sub-navbar {
+  background-color: #222;
+  padding: 5px 20px;
+  display: flex;
+  align-items: center;
+  max-width: 90%;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.sub-navbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 12px;
+  transition: background-color 0.3s ease;
+}
+
+.sub-navbar a,
+.sub-navbar .dropdown-btn {
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+}
+
+.sub-navbar a::after,
+.sub-navbar .dropdown-btn::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.sub-navbar a:hover::after,
+.sub-navbar .dropdown-btn:hover::after {
+  width: 100%;
+}
