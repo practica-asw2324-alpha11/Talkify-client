@@ -50,7 +50,8 @@
     user.value = response.data;
     num_activity.value = { 
         num_threads: user.value.posts_count,
-        num_comments: user.value.comments_count
+        num_comments: user.value.comments_count,
+        num_boosts: user.value.boosts_count
       }
     console.log("USER CHARGED")
     console.log(user.value);

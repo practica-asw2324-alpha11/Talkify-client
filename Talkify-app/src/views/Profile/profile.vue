@@ -93,9 +93,9 @@
         num_threads: user.value.posts_count,
         num_comments: user.value.comments_count
       }
-      console.log(num_activity.value)
       console.log("USER CHARGED")
       console.log(user.value);
+      console.log(num_activity.value)
       formData.value = { ...user.value, avatar: null, background: null }; 
     } catch (error) {
       console.error('Error fetching user:', error);

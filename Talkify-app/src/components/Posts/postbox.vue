@@ -163,7 +163,7 @@ const isOwner = computed(() => {
       let response = await api.delete(`posts/${postId}/boost`)
       post.value = response.data.post;
 
-      if(route.path === '/profile') {
+      if(route.path.includes('/users/')) {
         emit('unboost-post', post.value)
       }
 

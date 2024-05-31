@@ -112,8 +112,7 @@ const fetchData = async () => {
 };
 
 const onUnboostPost = async (postU) => {
-  console.log(postU)
-  boostedPosts.value = boostedPosts.value.filter(boostedPost => boostedPost.id !== postU.id);
+  window.location.refresh()
 }
 
 onMounted(async () => {
